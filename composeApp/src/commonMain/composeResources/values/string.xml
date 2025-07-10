@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_name">Երգարան</string>
+    <string name="error_text">Error</string>
+    <string name="song_number">Երգ %1$s</string>
+    <string name="song_index_number">Համար՝ %1$s</string>
+    <string name="no_bookmarked_songs">Դուք ոչ մի երգ դեռ չեք էջանշել</string>
+    <string name="bookmarked_songs">Էջանշված երգեր</string>
+    <string name="enter_number">Գրեք համարը</string>
+    <string name="search">Գտնել</string>
+    <string name="items_range">%1$s - %2$s</string>
+    <string name="search_by_words">Որոնում ըստ բառի</string>
+    <string name="nothing_founded">. բառով կամ բառակապակցությամբ երգ չի գտնվել</string>
+    <string name="no_song_found_by_number">Այս համարով երգ չի գտնվել</string>
+    <string name="empty_string">" "</string>
+    <string name="test_snackbar">"Please wait"</string>
+    <string name="song_marked">Էջանշումը կատարվել է</string>
+    <string name="song_unmarked">Էջանշումը հանվել է</string>
+    <string name="font_size_controller_text">Ա</string>
+    <string name="change_font_size">Փոխեք տառաչափը։</string>
+    <string name="enter_next_song_index">Գրեք հաջորդ երգի համարը</string>
+
+</resources>
