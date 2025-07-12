@@ -10,7 +10,6 @@ import com.arkivanov.decompose.router.stack.StackNavigation
 import com.arkivanov.decompose.router.stack.bringToFront
 import com.arkivanov.decompose.router.stack.childStack
 import com.arkivanov.decompose.router.stack.pop
-import com.arkivanov.decompose.router.stack.push
 import com.arkivanov.decompose.router.stack.pushNew
 import kotlinx.serialization.Serializable
 
@@ -29,7 +28,6 @@ class RootComponent(
     )
 
     fun navigateTo(config: Configuration) {
-//        navigation.pudsh(config)
         navigation.bringToFront(config)
     }
 
