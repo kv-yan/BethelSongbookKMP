@@ -1,17 +1,10 @@
-package am.bethel.application.navigation.navigation_screen_component
+package am.bethel.application.list.presentation
 
-
-import androidx.compose.runtime.MutableState
-import com.arkivanov.decompose.ComponentContext
-import com.arkivanov.decompose.value.MutableValue
-import com.arkivanov.decompose.value.Value
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import org.koin.core.component.KoinComponent
 
-class ListScreenComponent(
-    componentContext: ComponentContext,
-    private val onNavigateToDetailsScreen: (Int) -> Unit
-) {
+class ListViewModel : KoinComponent {
     private val _songsRangeCount = MutableStateFlow(
         listOf(
             IntRange(1, 99),
@@ -31,11 +24,8 @@ class ListScreenComponent(
     private val _searchQuery = MutableStateFlow("")
     val searchQuery = _searchQuery.asStateFlow()
 
+
     fun setSearchQuery(value: String) {
         _searchQuery.value = value
     }
-
-    fun navigateToDetailsScreen(songIndex: Int)= onNavigateToDetailsScreen(songIndex)
-
 }
-

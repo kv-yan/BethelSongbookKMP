@@ -2,7 +2,6 @@ package am.bethel.application.list.presentation
 
 import am.bethel.application.common.presentation.components.inputFeald.AppInputField
 import am.bethel.application.list.presentation.components.ListRageItem
-import am.bethel.application.navigation.navigation_screen_component.ListScreenComponent
 import am.bethel.application.settings.domain.model.AppTheme
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -29,16 +28,17 @@ import bethelsongbookkmp.composeapp.generated.resources.Res
 import bethelsongbookkmp.composeapp.generated.resources.enter_number
 import bethelsongbookkmp.composeapp.generated.resources.search
 import org.jetbrains.compose.resources.stringResource
+import org.koin.compose.koinInject
 
 @Composable
 fun ListScreen(
     modifier: Modifier = Modifier,
     appTheme: AppTheme,
-    listComponent: ListScreenComponent,
+    viewModel: ListViewModel = koinInject(),
     navigateToDetails: (Int) -> Unit
 ) {
-    val songsIntRange by listComponent.songsCount.collectAsState()
-    val searchQuery by listComponent.searchQuery.collectAsState()
+    val songsIntRange by viewModel.songsCount.collectAsState()
+    val searchQuery by viewModel.searchQuery.collectAsState()
 
     Scaffold(
         modifier = modifier.fillMaxSize(),
@@ -55,7 +55,7 @@ fun ListScreen(
                 label = stringResource(Res.string.enter_number),
                 searchQuery = searchQuery,
                 appTheme = appTheme,
-                onValueChange = listComponent::setSearchQuery,
+                onValueChange = viewModel::setSearchQuery,
                 trailingIcon = {
                     TextButton(
                         enabled = searchQuery.isNotEmpty(),

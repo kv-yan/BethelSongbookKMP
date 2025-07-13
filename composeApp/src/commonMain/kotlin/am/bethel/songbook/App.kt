@@ -1,7 +1,6 @@
 package am.bethel.songbook
 
 import am.bethel.application.bookmarked.presentation.BookmarkedScreen
-import am.bethel.application.common.domain.model.Song
 import am.bethel.application.common.presentation.components.ui.PurpleGrey40
 import am.bethel.application.details.presentation.DetailsScreen
 import am.bethel.application.list.presentation.ListScreen
@@ -21,9 +20,6 @@ import com.arkivanov.decompose.extensions.compose.jetbrains.stack.Children
 import com.arkivanov.decompose.extensions.compose.jetbrains.stack.animation.slide
 import com.arkivanov.decompose.extensions.compose.jetbrains.stack.animation.stackAnimation
 import com.arkivanov.decompose.extensions.compose.jetbrains.subscribeAsState
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 
 @OptIn(ExperimentalDecomposeApi::class)
 @Composable
@@ -32,25 +28,8 @@ fun App(
 ) {
     val childStack by root.childStack.subscribeAsState()
     val currentChild = childStack.active.instance
-    val scope = rememberCoroutineScope()
     val appTheme = AppTheme.LightBlue700
     var isLoadingSongs by remember { mutableStateOf(false) }
-    var songs by remember { mutableStateOf<List<Song>>(emptyList()) }
-
-    LaunchedEffect(Unit) {
-        isLoadingSongs = true
-        val songsRepository = am.bethel.application.common.data.repository.SongRepositoryImpl()
-        songsRepository.getAll().onEach {
-            songs = it
-            isLoadingSongs = false
-            println("Songs size is ${songs.size}")
-            println("Songs are ${songs.first()}")
-            // TODO: check song word validation ...
-        }.catch {
-            println("Error: $it")
-            isLoadingSongs = false
-        }.launchIn(scope)
-    }
 
     // Layout with bottom bar
     Column(modifier = Modifier.fillMaxSize()) {
@@ -58,7 +37,9 @@ fun App(
         Box(modifier = Modifier.weight(1f)) {
             if (isLoadingSongs) {
                 Box(
-                    modifier = Modifier.fillMaxSize(1f).background(PurpleGrey40.copy(0.2f)),
+                    modifier = Modifier
+                        .fillMaxSize(1f)
+                        .background(PurpleGrey40.copy(0.2f)),
                     contentAlignment = androidx.compose.ui.Alignment.Center
                 ) {
                     CircularProgressIndicator()
@@ -72,11 +53,9 @@ fun App(
                         is RootComponent.Child.Bookmarked -> BookmarkedScreen(
                             appTheme = appTheme,
                             component = component.component,
+                            onBackClick = { root.navigateBack() },
                             navigateToDetails = {
                                 root.navigateTo(RootComponent.Configuration.Details(it.toString()))
-                            },
-                            onBackClick = {
-                                root.navigateBack()
                             }
                         )
 
@@ -91,7 +70,6 @@ fun App(
 
                         is RootComponent.Child.List -> ListScreen(
                             appTheme = appTheme,
-                            listComponent = component.component,
                             navigateToDetails = {
                                 root.navigateTo(RootComponent.Configuration.Details(it.toString()))
                             }
@@ -115,12 +93,9 @@ fun App(
         // Show BottomNavigation only if not Details
         if (currentChild !is RootComponent.Child.Details) {
             AppBottomNavigation(
-                currentChild = currentChild,
-                appTheme = appTheme,
-                onNavigateTo = {
+                currentChild = currentChild, appTheme = appTheme, onNavigateTo = {
                     root.navigateTo(it)
-                }
-            )
+                })
         }
     }
 }

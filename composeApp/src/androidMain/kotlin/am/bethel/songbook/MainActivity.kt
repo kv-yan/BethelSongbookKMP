@@ -1,12 +1,11 @@
 package am.bethel.songbook
 
+import am.bethel.application.koin.initKoin
 import am.bethel.application.navigation.navigation_component.RootComponent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.tooling.preview.Preview
 import com.arkivanov.decompose.ExperimentalDecomposeApi
 import com.arkivanov.decompose.retainedComponent
 
@@ -18,7 +17,9 @@ class MainActivity : ComponentActivity() {
         val root = retainedComponent {
             RootComponent(it)
         }
+        initKoin()
         setContent {
             App(root)
-        }}
+        }
+    }
 }

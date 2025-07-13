@@ -1,4 +1,3 @@
-import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
@@ -36,6 +35,7 @@ kotlin {
         androidMain.dependencies {
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
+            implementation("io.insert-koin:koin-android:3.5.3")
         }
         commonMain.dependencies {
             implementation(compose.runtime)
@@ -48,7 +48,18 @@ kotlin {
             implementation(libs.decompose)
             implementation(libs.decompose.jetbrains)
             implementation(libs.kotlinx.serialization.json)
+            // Koin Core
+            implementation("io.insert-koin:koin-core:3.5.3")
+
+            // Koin for KMP ViewModel
+            implementation("io.insert-koin:koin-core:3.5.3")
+            implementation("io.insert-koin:koin-compose:1.1.0")
         }
+
+        iosMain.dependencies {
+            implementation("io.insert-koin:koin-core:3.5.3")
+        }
+
         commonTest.dependencies {
             implementation(libs.kotlin.test)
         }
