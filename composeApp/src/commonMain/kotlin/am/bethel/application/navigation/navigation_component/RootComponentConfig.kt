@@ -41,7 +41,6 @@ class RootComponent(
         return when (config) {
             is Configuration.Details -> Child.Details(
                 DetailsScreenComponent(
-                    componentContext = context,
                     index = config.index.toInt()
                 )
             )

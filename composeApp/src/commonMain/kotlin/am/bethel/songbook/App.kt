@@ -62,7 +62,6 @@ fun App(
                         is RootComponent.Child.Details -> DetailsScreen(
                             appTheme = appTheme,
                             currentIndex = component.component.songIndex.collectAsState().value,
-                            detailsComponent = component.component,
                             onBackClick = {
                                 root.navigateBack()
                             }
