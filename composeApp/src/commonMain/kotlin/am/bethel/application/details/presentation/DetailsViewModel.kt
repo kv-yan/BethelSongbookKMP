@@ -108,7 +108,6 @@ class DetailsViewModel(
     private fun observeFavoriteState(song: Song) {
         favoriteJob?.cancel()
         favoriteJob = isFavoriteUseCase(song).onEach {
-            println("isFavorite :: $it")
             _isFavorite.value = it
         }.launchIn(coroutineScope)
     }

@@ -26,7 +26,6 @@ class BookmarkViewModel(
     init {
         getFavoriteSongsUseCase().onEach {
             _favoriteSongs.value = it
-            println("favorite songs :: $it")
         }.launchIn(coroutineScope)
     }
 

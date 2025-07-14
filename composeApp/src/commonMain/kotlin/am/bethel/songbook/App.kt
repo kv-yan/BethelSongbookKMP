@@ -75,7 +75,6 @@ fun App(
 
                         is RootComponent.Child.Search -> SearchScreen(
                             appTheme = appTheme,
-                            component = component.component,
                             navigateToDetails = {
                                 root.navigateTo(RootComponent.Configuration.Details(it.toString()))
                             },
