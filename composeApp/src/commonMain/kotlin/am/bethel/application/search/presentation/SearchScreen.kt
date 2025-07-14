@@ -3,7 +3,6 @@ package am.bethel.application.search.presentation
 import am.betel.songbook.common.presentation.ui.theme.Shape16
 import am.bethel.application.common.presentation.components.inputFeald.AppInputField
 import am.bethel.application.common.presentation.components.ui.FontRegular
-import am.bethel.application.navigation.navigation_screen_component.SearchScreenComponent
 import am.bethel.application.settings.domain.model.AppTheme
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -33,7 +32,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.key.Key.Companion.R
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -50,20 +48,21 @@ import bethelsongbookkmp.composeapp.generated.resources.search
 import bethelsongbookkmp.composeapp.generated.resources.search_by_words
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
+import org.koin.compose.koinInject
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchScreen(
     modifier: Modifier = Modifier,
     appTheme: AppTheme,
-    component: SearchScreenComponent,
+    viewModel: SearchViewModel= koinInject(),
     navigateToDetails: (Int) -> Unit,
     onBackClick: () -> Unit = {}
 ){
-    val searchQuery by component.searchQuery.collectAsState()
-    val foundedSongs by component.foundedSongs.collectAsState()
-    val nothingFounded by component.nothingFounded.collectAsState()
-    val isLoading by component.isLoading.collectAsState()
+    val searchQuery by viewModel.searchQuery.collectAsState()
+    val foundedSongs by viewModel.foundedSongs.collectAsState()
+    val nothingFounded by viewModel.nothingFounded.collectAsState()
+    val isLoading by viewModel.isLoading.collectAsState()
     Box(
         modifier = Modifier.fillMaxSize()
     ) {
@@ -101,7 +100,7 @@ fun SearchScreen(
                     label = stringResource(Res.string.search_by_words),
                     searchQuery = searchQuery,
                     appTheme = appTheme,
-                    onValueChange = component::setSearchQuery,
+                    onValueChange = viewModel::setSearchQuery,
                     trailingIcon = {
                         TextButton(
                             enabled = searchQuery.isNotEmpty(),
@@ -109,7 +108,7 @@ fun SearchScreen(
                                 contentColor = if (searchQuery.isNotEmpty()) appTheme.primaryColor else appTheme.unfocusedColor,
                                 disabledContentColor = appTheme.unfocusedColor
                             ),
-                            onClick = { component.onSearchClick() }) {
+                            onClick = { viewModel.onSearchClick() }) {
                             Text(text = stringResource(Res.string.search))
                         }
                     },
@@ -119,7 +118,7 @@ fun SearchScreen(
                     ),
                     keyboardActions = KeyboardActions(
                         onSearch = {
-                            component.onSearchClick()
+                            viewModel.onSearchClick()
                         }
                     )
                 )
