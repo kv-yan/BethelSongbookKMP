@@ -1,9 +1,7 @@
 package am.bethel.application.bookmarked.presentation
 
 import am.bethel.application.common.presentation.components.ui.FontRegular
-import am.bethel.application.navigation.navigation_screen_component.BookmarkedScreenComponent
 import am.bethel.application.settings.domain.model.AppTheme
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -29,19 +27,20 @@ import bethelsongbookkmp.composeapp.generated.resources.ic_back
 import bethelsongbookkmp.composeapp.generated.resources.no_bookmarked_songs
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
+import org.koin.compose.koinInject
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BookmarkedScreen(
     modifier: Modifier = Modifier,
     appTheme: AppTheme,
-    component: BookmarkedScreenComponent,
+    viewModel: BookmarkViewModel = koinInject(),
     navigateToDetails: (Int) -> Unit,
     onSnackbarShown: () -> Unit = {},
     onBackClick: () -> Unit = {}
 ){
 
-    val songs by component.favoriteSongs.collectAsState()
+    val songs by viewModel.favoriteSongs.collectAsState()
 
     Scaffold(
         modifier = modifier.fillMaxSize(),
@@ -99,10 +98,8 @@ fun BookmarkedScreen(
                     appTheme = appTheme,
                     onClick = { navigateToDetails(it) },
                     onRemoveClick = {
-                        component.removeFavoriteSong(
-                            song = song,
-                            showSnackbar = onSnackbarShown
-                        )
+                        viewModel.removeFavoriteSong(song)
+                        onSnackbarShown()
                     }
                 )
             }

@@ -36,7 +36,7 @@ fun BookmarkedSongItem(
     onRemoveClick: (Int) -> Unit = {},
 ) {
 
-    Row(modifier = modifier.clickable { onClick(song.id) }) {
+    Row(modifier = modifier.clickable { onClick(song.songNumber.toInt()) }) {
         Box(
             modifier = Modifier
                 .padding(8.dp)

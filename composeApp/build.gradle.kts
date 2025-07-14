@@ -58,6 +58,7 @@ kotlin {
             implementation(libs.io.insert.koin.koin.core)
             implementation(libs.koin.compose)
             implementation(libs.sql.delight)
+            implementation(libs.sql.delight.coroutines)
         }
 
         iosMain.dependencies {

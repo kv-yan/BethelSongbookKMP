@@ -43,6 +43,7 @@ androidx-lifecycle-runtimeCompose = { module = "org.jetbrains.androidx.lifecycle
 android-driver = { module = "app.cash.sqldelight:android-driver", version.ref = "sqlDelightVersion" }
 native-driver = { module = "app.cash.sqldelight:native-driver", version.ref = "sqlDelightVersion" }
 sql-delight = { module = "app.cash.sqldelight:runtime", version.ref = "sqlDelightVersion" }
+sql-delight-coroutines = { module = "app.cash.sqldelight:coroutines-extensions", version.ref = "sqlDelightVersion" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

@@ -14,7 +14,6 @@ class SongJsonLoader {
         emit(
             raw.mapIndexed { index, it ->
                 val cleanText = cleanHtmlText(it.songWords)
-                println("clean text: $cleanText")
                 Song(
                     id = index,
                     songNumber = it.songNumber,

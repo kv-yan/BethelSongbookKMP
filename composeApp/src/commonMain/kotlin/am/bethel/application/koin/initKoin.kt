@@ -1,5 +1,7 @@
 package am.bethel.application.koin
 
+import am.bethel.application.bookmarked.data.di.bookmarkDataModule
+import am.bethel.application.bookmarked.presentation.di.bookmarkPresentationModule
 import am.bethel.application.common.data.di.commonDataModule
 import am.bethel.application.details.data.di.detailsDataModule
 import am.bethel.application.details.presentation.di.detailsPresentationModule
@@ -16,7 +18,8 @@ fun initKoin(vararg modules: Module) {
                 commonDataModule,
                 detailsDataModule,
                 detailsPresentationModule,
-
+                bookmarkDataModule,
+                bookmarkPresentationModule
 
             ) + modules
         )

@@ -17,5 +17,14 @@ fun SongEntity.toSong() = Song(
     id = this.id.toInt(),
     songNumber = this.songNumber,
     songWords = this.songWords,
-
 )
+
+fun Song.getTitle(): String {
+    val result = StringBuilder()
+    for (it in this.getWords().split("\n")) {
+        if (it.contains("1.")) {
+            result.append(it)
+        }
+    }
+    return result.toString()
+}
