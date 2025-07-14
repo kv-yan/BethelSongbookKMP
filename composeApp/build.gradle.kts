@@ -1,4 +1,3 @@
-import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
@@ -8,6 +7,7 @@ plugins {
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.kotlinSerialization)
+    alias(libs.plugins.sql.delight)
 
 }
 
@@ -28,14 +28,18 @@ kotlin {
         iosTarget.binaries.framework {
             baseName = "ComposeApp"
             isStatic = true
+            linkerOpts("-lsqlite3")
         }
     }
+
 
     sourceSets {
 
         androidMain.dependencies {
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
+            implementation(libs.koin.android)
+            implementation(libs.android.driver)
         }
         commonMain.dependencies {
             implementation(compose.runtime)
@@ -48,7 +52,21 @@ kotlin {
             implementation(libs.decompose)
             implementation(libs.decompose.jetbrains)
             implementation(libs.kotlinx.serialization.json)
+            // Koin Core
+            implementation(libs.koin.core)
+
+            implementation(libs.io.insert.koin.koin.core)
+            implementation(libs.koin.compose)
+            implementation(libs.sql.delight)
+            implementation(libs.sql.delight.coroutines)
         }
+
+        iosMain.dependencies {
+            implementation(libs.io.insert.koin.koin.core)
+            implementation(libs.native.driver)
+
+        }
+
         commonTest.dependencies {
             implementation(libs.kotlin.test)
         }
@@ -86,3 +104,10 @@ dependencies {
     debugImplementation(compose.uiTooling)
 }
 
+sqldelight {
+    databases {
+        create("BethelDatabase") {
+            packageName.set("am.bethel.songbook")
+        }
+    }
+}

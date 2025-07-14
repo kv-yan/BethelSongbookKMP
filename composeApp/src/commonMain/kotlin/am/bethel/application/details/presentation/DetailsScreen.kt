@@ -1,9 +1,15 @@
 package am.bethel.application.details.presentation
 
+import am.bethel.application.common.domain.model.getTitle
 import am.bethel.application.common.presentation.components.ui.FontBold
-import am.bethel.application.navigation.navigation_screen_component.DetailsScreenComponent
+import am.bethel.application.common.presentation.components.ui.FontRegular
 import am.bethel.application.settings.domain.model.AppTheme
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -15,31 +21,43 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import bethelsongbookkmp.composeapp.generated.resources.Res
 import bethelsongbookkmp.composeapp.generated.resources.ic_back
 import bethelsongbookkmp.composeapp.generated.resources.ic_bookmark_add
+import bethelsongbookkmp.composeapp.generated.resources.ic_bookmark_remove
 import bethelsongbookkmp.composeapp.generated.resources.ic_load_next_song
 import bethelsongbookkmp.composeapp.generated.resources.ic_settings
 import bethelsongbookkmp.composeapp.generated.resources.ic_share
 import bethelsongbookkmp.composeapp.generated.resources.song_number
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
+import org.koin.compose.koinInject
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DetailsScreen(
     modifier: Modifier = Modifier,
     currentIndex: Int,
-    detailsComponent: DetailsScreenComponent,
+    viewModel: DetailsViewModel = koinInject(),
     appTheme: AppTheme,
     onBackClick: () -> Unit = {},
 ) {
-    val detailsId by detailsComponent.songIndex.collectAsState()
-    LaunchedEffect(Unit){
-        detailsComponent.setSongIndex(currentIndex)
+    val currentSong by viewModel.currentSongs.collectAsState()
+    val isFavorite by viewModel.isFavorite.collectAsState()
+    var isLoadSongDialogVisible by rememberSaveable { mutableStateOf(false) }
+    val verticalScrollState = rememberScrollState()
+
+    LaunchedEffect(Unit) {
+        viewModel.loadSong(currentIndex)
+        viewModel.setCurrentIndex(currentIndex)
     }
 
     Scaffold(
@@ -51,7 +69,7 @@ fun DetailsScreen(
                     containerColor = appTheme.backgroundColor
                 ), title = {
                     Text(
-                        text = stringResource(Res.string.song_number, detailsId),
+                        text = stringResource(Res.string.song_number, currentSong?.songNumber ?: 0),
                         fontFamily = FontBold(),
                         fontStyle = FontStyle.Normal,
                         fontSize = 20.sp,
@@ -72,7 +90,7 @@ fun DetailsScreen(
 
                     IconButton(
                         onClick = {
-//                            isLoadSongDialogVisible = true
+                            isLoadSongDialogVisible = true
                         }
                     ) {
                         Icon(
@@ -96,13 +114,13 @@ fun DetailsScreen(
 
                     IconButton(
                         onClick = {
-//                            viewModel.toggleFavorite(onSnackbarShowed = onSnackbarShowed)
+                            viewModel.toggleFavorite(/*onSnackbarShowed = onSnackbarShowed*/)
                         }
                     ) {
                         Icon(
-                            painter = /*if (isFavorite)
-                                painterResource(R.drawable.ic_bookmark_remove)
-                            else*/
+                            painter = if (isFavorite)
+                                painterResource(Res.drawable.ic_bookmark_remove)
+                            else
                                 painterResource(Res.drawable.ic_bookmark_add),
                             contentDescription = null,
                             tint = appTheme.primaryColor
@@ -123,12 +141,35 @@ fun DetailsScreen(
         },
     ) {
 
-        Text(
-            text = "Details",
-            fontFamily = FontBold(),
-            fontStyle = FontStyle.Normal,
-            fontSize = 20.sp,
-            color = appTheme.primaryColor
-        )
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(it)
+                .padding(start = 24.dp, end = 4.dp)
+                .verticalScroll(verticalScrollState),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            val title = currentSong?.getTitle()
+            if (!title.isNullOrEmpty())
+                Text(
+                    text = title,
+                    fontFamily = FontRegular(),
+                    fontSize = 22.sp,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    color = appTheme.primaryTextColor
+                )
+
+            currentSong?.getWords()?.let { words ->
+                SwipeableSongText(
+                    modifier = modifier,
+                    words = words,
+                    appTheme = appTheme,
+//                    fontSize = currentFontSize,
+                    onNextSong = viewModel::loadNextSong,
+                    onPrevSong = viewModel::loadPrevSong
+                )
+            }
+        }
     }
 }
