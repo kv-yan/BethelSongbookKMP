@@ -1,0 +1,50 @@
+-- Song table
+CREATE TABLE Song (
+    id INTEGER NOT NULL PRIMARY KEY,
+    songNumber TEXT NOT NULL,
+    songWords TEXT NOT NULL
+);
+
+-- Favorites table
+CREATE TABLE FavoriteSongs (
+    songId INTEGER NOT NULL PRIMARY KEY,
+    addedAt INTEGER NOT NULL,
+    FOREIGN KEY(songId) REFERENCES Song(id)
+);
+
+-- Insert songs
+insertSong:
+INSERT OR REPLACE INTO Song(id, songNumber, songWords)
+VALUES (?, ?, ?);
+
+-- Get all songs
+getAllSongs:
+SELECT * FROM Song;
+
+-- Get by song number
+getBySongNumber:
+SELECT * FROM Song WHERE songNumber = ? LIMIT 1;
+
+-- Search songs
+searchByText:
+SELECT * FROM Song WHERE songWords LIKE '%' || ? || '%';
+
+-- Add to favorites (ignore if exists)
+addToFavorites:
+INSERT OR IGNORE INTO FavoriteSongs(songId, addedAt)
+VALUES (?, ?);
+
+-- Remove from favorites
+removeFromFavorites:
+DELETE FROM FavoriteSongs WHERE songId = ?;
+
+-- Is favorite
+isFavorite:
+SELECT EXISTS(SELECT 1 FROM FavoriteSongs WHERE songId = ?);
+
+-- Get favorite songs
+getFavorites:
+SELECT s.*
+FROM Song s
+INNER JOIN FavoriteSongs f ON s.id = f.songId
+ORDER BY f.addedAt;

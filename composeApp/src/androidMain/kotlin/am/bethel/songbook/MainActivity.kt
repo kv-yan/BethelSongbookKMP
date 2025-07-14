@@ -1,5 +1,6 @@
 package am.bethel.songbook
 
+import am.bethel.application.common.data.factory.di.androidModule
 import am.bethel.application.koin.initKoin
 import am.bethel.application.navigation.navigation_component.RootComponent
 import android.os.Bundle
@@ -17,7 +18,9 @@ class MainActivity : ComponentActivity() {
         val root = retainedComponent {
             RootComponent(it)
         }
-        initKoin()
+        initKoin(
+            androidModule,
+        )
         setContent {
             App(root)
         }

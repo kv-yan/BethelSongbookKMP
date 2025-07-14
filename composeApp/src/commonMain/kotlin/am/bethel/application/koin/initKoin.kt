@@ -15,7 +15,8 @@ fun initKoin(vararg modules: Module) {
                 listPresentationModule,
                 commonDataModule,
                 detailsDataModule,
-                detailsPresentationModule
+                detailsPresentationModule,
+
 
             ) + modules
         )

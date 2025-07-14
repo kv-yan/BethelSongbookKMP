@@ -7,6 +7,7 @@ plugins {
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.kotlinSerialization)
+    alias(libs.plugins.sql.delight)
 
 }
 
@@ -27,15 +28,18 @@ kotlin {
         iosTarget.binaries.framework {
             baseName = "ComposeApp"
             isStatic = true
+            linkerOpts("-lsqlite3")
         }
     }
+
 
     sourceSets {
 
         androidMain.dependencies {
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
-            implementation("io.insert-koin:koin-android:3.5.3")
+            implementation(libs.koin.android)
+            implementation(libs.android.driver)
         }
         commonMain.dependencies {
             implementation(compose.runtime)
@@ -49,15 +53,17 @@ kotlin {
             implementation(libs.decompose.jetbrains)
             implementation(libs.kotlinx.serialization.json)
             // Koin Core
-            implementation("io.insert-koin:koin-core:3.5.3")
+            implementation(libs.koin.core)
 
-            // Koin for KMP ViewModel
-            implementation("io.insert-koin:koin-core:3.5.3")
-            implementation("io.insert-koin:koin-compose:1.1.0")
+            implementation(libs.io.insert.koin.koin.core)
+            implementation(libs.koin.compose)
+            implementation(libs.sql.delight)
         }
 
         iosMain.dependencies {
-            implementation("io.insert-koin:koin-core:3.5.3")
+            implementation(libs.io.insert.koin.koin.core)
+            implementation(libs.native.driver)
+
         }
 
         commonTest.dependencies {
@@ -97,3 +103,10 @@ dependencies {
     debugImplementation(compose.uiTooling)
 }
 
+sqldelight {
+    databases {
+        create("BethelDatabase") {
+            packageName.set("am.bethel.songbook")
+        }
+    }
+}

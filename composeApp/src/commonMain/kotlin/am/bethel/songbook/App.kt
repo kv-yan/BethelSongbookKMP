@@ -3,6 +3,7 @@ package am.bethel.songbook
 import am.bethel.application.bookmarked.presentation.BookmarkedScreen
 import am.bethel.application.common.presentation.components.ui.PurpleGrey40
 import am.bethel.application.details.presentation.DetailsScreen
+import am.bethel.application.details.presentation.DetailsViewModel
 import am.bethel.application.list.presentation.ListScreen
 import am.bethel.application.navigation.bottom_navigation.AppBottomNavigation
 import am.bethel.application.navigation.navigation_component.RootComponent
@@ -20,6 +21,7 @@ import com.arkivanov.decompose.extensions.compose.jetbrains.stack.Children
 import com.arkivanov.decompose.extensions.compose.jetbrains.stack.animation.slide
 import com.arkivanov.decompose.extensions.compose.jetbrains.stack.animation.stackAnimation
 import com.arkivanov.decompose.extensions.compose.jetbrains.subscribeAsState
+import org.koin.compose.koinInject
 
 @OptIn(ExperimentalDecomposeApi::class)
 @Composable
