@@ -49,16 +49,27 @@ kotlin {
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
             implementation(libs.androidx.lifecycle.viewmodel)
+
+            // decompose navigation
             implementation(libs.decompose)
             implementation(libs.decompose.jetbrains)
+
+            // serialization
             implementation(libs.kotlinx.serialization.json)
+
             // Koin Core
             implementation(libs.koin.core)
-
             implementation(libs.io.insert.koin.koin.core)
             implementation(libs.koin.compose)
+
+            // sqlDelight
             implementation(libs.sql.delight)
             implementation(libs.sql.delight.coroutines)
+
+            // datastore
+            implementation(libs.datastore)
+            implementation(libs.datastore.preferences)
+
         }
 
         iosMain.dependencies {

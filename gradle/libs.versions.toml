@@ -19,6 +19,7 @@ extensionsComposeJetbrains = "2.1.4-compose-experimental"
 decompose = "2.2.0-alpha03"
 kotlinxSerializationJson = "1.6.1"
 sqlDelightVersion = "2.1.0"
+datastore = "1.1.1"
 
 [libraries]
 decompose = { module = "com.arkivanov.decompose:decompose", version.ref = "decompose" }
@@ -44,6 +45,9 @@ android-driver = { module = "app.cash.sqldelight:android-driver", version.ref = 
 native-driver = { module = "app.cash.sqldelight:native-driver", version.ref = "sqlDelightVersion" }
 sql-delight = { module = "app.cash.sqldelight:runtime", version.ref = "sqlDelightVersion" }
 sql-delight-coroutines = { module = "app.cash.sqldelight:coroutines-extensions", version.ref = "sqlDelightVersion" }
+datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastore" }
+datastore = { module = "androidx.datastore:datastore", version.ref = "datastore" }
+
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
