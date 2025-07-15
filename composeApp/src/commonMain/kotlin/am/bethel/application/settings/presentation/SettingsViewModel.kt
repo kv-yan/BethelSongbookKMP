@@ -44,12 +44,10 @@ class SettingsViewModel(
 
         getFontSizeUseCase().onEach {
             _fontSize.value = it
-            println("fontSize: $it")
         }.launchIn(viewModelScope)
 
         getThemeIndexUseCase().onEach {
             _appTheme.value = _availableThemes.value[it]
-            println("themeIndex: $it")
         }.launchIn(viewModelScope)
 
     }

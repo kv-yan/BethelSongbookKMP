@@ -3,7 +3,9 @@ package am.bethel.application.details.presentation
 import am.bethel.application.common.domain.model.getTitle
 import am.bethel.application.common.presentation.components.ui.FontBold
 import am.bethel.application.common.presentation.components.ui.FontRegular
+import am.bethel.application.details.presentation.popap.LoadNextSongDialog
 import am.bethel.application.settings.domain.model.AppTheme
+import am.bethel.application.settings.presentation.SettingsBottomSheet
 import am.bethel.application.settings.presentation.SettingsViewModel
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -55,6 +57,7 @@ fun DetailsScreen(
     val currentSong by viewModel.currentSongs.collectAsState()
     val isFavorite by viewModel.isFavorite.collectAsState()
     var isLoadSongDialogVisible by rememberSaveable { mutableStateOf(false) }
+    val bottomSheetExpanded = rememberSaveable { mutableStateOf(false) }
     val verticalScrollState = rememberScrollState()
 
     val currentFontSize by settingsViewModel.fontSize.collectAsState()
@@ -134,7 +137,7 @@ fun DetailsScreen(
 
                     IconButton(
                         onClick = {
-//                            bottomSheetExpanded.value = true
+                            bottomSheetExpanded.value = true
                         }) {
                         Icon(
                             painterResource(Res.drawable.ic_settings),
@@ -177,4 +180,32 @@ fun DetailsScreen(
             }
         }
     }
+
+    SettingsBottomSheet(
+        expanded = bottomSheetExpanded,
+        appTheme = appTheme,
+        themes = themes,
+        currentFontSize = currentFontSize,
+        onFontSizeIncrease = settingsViewModel::increment,
+        onFontSizeDecrease = settingsViewModel::decrement,
+        onThemeChange = settingsViewModel::setUiSetting
+    )
+
+    if (isLoadSongDialogVisible) {
+        LoadNextSongDialog(
+            theme = appTheme,
+            onDismiss = { isLoadSongDialogVisible = false },
+            onConfirm = {
+                viewModel.loadSongByIndex(
+                    index = it,
+//                    onSnackbarShowed = onSnackbarShowed,
+                    onLoadComplete = {
+                        isLoadSongDialogVisible = false
+                    }
+                )
+            }
+        )
+    }
+
+
 }

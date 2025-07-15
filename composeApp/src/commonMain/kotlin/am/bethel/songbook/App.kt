@@ -12,7 +12,9 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import com.arkivanov.decompose.ExperimentalDecomposeApi
@@ -32,73 +34,79 @@ fun App(
     val currentChild = childStack.active.instance
     var isLoadingSongs by remember { mutableStateOf(false) }
     val appTheme by settingsViewModel.uiSettings.collectAsState()
+    appTheme?.let { theme ->
 
+        Scaffold(
+            modifier = Modifier.fillMaxSize(),
+            containerColor = theme.backgroundColor,
+        ) {
+            Column(modifier = Modifier.fillMaxSize().padding(bottom = it.calculateBottomPadding())) {
 
-    // Layout with bottom bar
-    Column(modifier = Modifier.fillMaxSize()) {
-        appTheme?.let { theme ->
+                Box(modifier = Modifier.weight(1f)) {
+                    if (isLoadingSongs) {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxSize(1f)
+                                .background(PurpleGrey40.copy(0.2f)),
+                            contentAlignment = androidx.compose.ui.Alignment.Center
+                        ) {
+                            CircularProgressIndicator()
+                        }
+                    } else {
+                        Children(
+                            stack = childStack,
+                            animation = stackAnimation(slide())
+                        ) { child ->
+                            when (val component = child.instance) {
+                                is RootComponent.Child.Bookmarked -> BookmarkedScreen(
+                                    appTheme = theme,
+                                    onBackClick = { root.navigateBack() },
+                                    navigateToDetails = {
+                                        root.navigateTo(RootComponent.Configuration.Details(it.toString()))
+                                    }
+                                )
 
-            Box(modifier = Modifier.weight(1f)) {
-                if (isLoadingSongs) {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxSize(1f)
-                            .background(PurpleGrey40.copy(0.2f)),
-                        contentAlignment = androidx.compose.ui.Alignment.Center
-                    ) {
-                        CircularProgressIndicator()
-                    }
-                } else {
-                    Children(
-                        stack = childStack,
-                        animation = stackAnimation(slide())
-                    ) { child ->
-                        when (val component = child.instance) {
-                            is RootComponent.Child.Bookmarked -> BookmarkedScreen(
-                                appTheme = theme,
-                                onBackClick = { root.navigateBack() },
-                                navigateToDetails = {
-                                    root.navigateTo(RootComponent.Configuration.Details(it.toString()))
-                                }
-                            )
+                                is RootComponent.Child.Details -> DetailsScreen(
+                                    appTheme = theme,
+                                    currentIndex = component.component.songIndex.collectAsState().value,
+                                    settingsViewModel = settingsViewModel,
+                                    onBackClick = {
+                                        root.navigateBack()
+                                    }
+                                )
 
-                            is RootComponent.Child.Details -> DetailsScreen(
-                                appTheme = theme,
-                                currentIndex = component.component.songIndex.collectAsState().value,
-                                settingsViewModel = settingsViewModel,
-                                onBackClick = {
-                                    root.navigateBack()
-                                }
-                            )
+                                is RootComponent.Child.List -> ListScreen(
+                                    appTheme = theme,
+                                    navigateToDetails = {
+                                        root.navigateTo(RootComponent.Configuration.Details(it.toString()))
+                                    }
+                                )
 
-                            is RootComponent.Child.List -> ListScreen(
-                                appTheme = theme,
-                                navigateToDetails = {
-                                    root.navigateTo(RootComponent.Configuration.Details(it.toString()))
-                                }
-                            )
-
-                            is RootComponent.Child.Search -> SearchScreen(
-                                appTheme = theme,
-                                navigateToDetails = {
-                                    root.navigateTo(RootComponent.Configuration.Details(it.toString()))
-                                },
-                                onBackClick = {
-                                    root.navigateBack()
-                                }
-                            )
+                                is RootComponent.Child.Search -> SearchScreen(
+                                    appTheme = theme,
+                                    navigateToDetails = {
+                                        root.navigateTo(RootComponent.Configuration.Details(it.toString()))
+                                    },
+                                    onBackClick = {
+                                        root.navigateBack()
+                                    }
+                                )
+                            }
                         }
                     }
                 }
-            }
 
-            // Show BottomNavigation only if not Details
-            if (currentChild !is RootComponent.Child.Details) {
-                AppBottomNavigation(
-                    currentChild = currentChild, appTheme = theme, onNavigateTo = {
-                        root.navigateTo(it)
-                    })
+                // Show BottomNavigation only if not Details
+                if (currentChild !is RootComponent.Child.Details) {
+                    AppBottomNavigation(
+                        currentChild = currentChild, appTheme = theme, onNavigateTo = {
+                            root.navigateTo(it)
+                        })
+                }
             }
         }
+
     }
+
+    // Layout with bottom bar
 }
