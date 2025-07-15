@@ -11,13 +11,11 @@ class InsertAllSongToDbUseCaseImpl(
     override suspend fun invoke() {
         settingsRepository.isFirstLaunchFlow.collect {
             if (!it) {
-                println("songs already inserted")
                 return@collect
             }
             else {
                 settingsRepository.setIsFirstLaunch(false)
                 repository.insertAll()
-                println("songs inserted")
             }
         }
     }

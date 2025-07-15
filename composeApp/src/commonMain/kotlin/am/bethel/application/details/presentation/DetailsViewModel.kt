@@ -82,25 +82,25 @@ class DetailsViewModel(
                 // update button state first
                 _isFavorite.value = false
                 removeFromFavoritesUseCase(song)
-/*
-                onSnackbarShowed(
-                    SnackbarState.Success(
-                        _message = R.string.song_unmarked,
-                        _icon = R.drawable.ic_bookmark_remove
-                    )
-                )
-*/
+                /*
+                                onSnackbarShowed(
+                                    SnackbarState.Success(
+                                        _message = R.string.song_unmarked,
+                                        _icon = R.drawable.ic_bookmark_remove
+                                    )
+                                )
+                */
             } else {
                 _isFavorite.value = true
                 addToFavoritesUseCaseImpl(song)
-/*
-                onSnackbarShowed(
-                    SnackbarState.Success(
-                        _message = R.string.song_marked,
-                        _icon = R.drawable.ic_bookmark_added
-                    )
-                )
-*/
+                /*
+                                onSnackbarShowed(
+                                    SnackbarState.Success(
+                                        _message = R.string.song_marked,
+                                        _icon = R.drawable.ic_bookmark_added
+                                    )
+                                )
+                */
             }
         }
     }
@@ -110,5 +110,26 @@ class DetailsViewModel(
         favoriteJob = isFavoriteUseCase(song).onEach {
             _isFavorite.value = it
         }.launchIn(coroutineScope)
+    }
+
+    fun loadSongByIndex(
+        index: Int,
+        /*onSnackbarShowed: (SnackbarState) -> Unit,*/
+        onLoadComplete: () -> Unit = {}
+    ) {
+        _currentIndex.value = index
+        if (index < MIN_INDEX || index > MAX_INDEX) {
+            /*
+                        onSnackbarShowed(
+                            SnackbarState.Error(
+                                _message = R.string.no_song_found_by_number,
+                                _icon = R.drawable.ic_error
+                            )
+                        )
+            */
+        } else {
+            getSongByIndex(index)
+            onLoadComplete()
+        }
     }
 }
