@@ -8,6 +8,8 @@ import am.bethel.application.details.presentation.di.detailsPresentationModule
 import am.bethel.application.list.presentation.di.listPresentationModule
 import am.bethel.application.search.data.di.searchDataModule
 import am.bethel.application.search.presentation.di.searchPresentationModule
+import am.bethel.application.settings.data.di.settingsDataModule
+import am.bethel.application.settings.presentation.di.settingsPresentationModule
 import org.koin.core.context.startKoin
 import org.koin.core.module.Module
 
@@ -23,8 +25,9 @@ fun initKoin(vararg modules: Module) {
                 bookmarkDataModule,
                 bookmarkPresentationModule,
                 searchDataModule,
-                searchPresentationModule
-
+                searchPresentationModule,
+                settingsDataModule,
+                settingsPresentationModule
             ) + modules
         )
     }

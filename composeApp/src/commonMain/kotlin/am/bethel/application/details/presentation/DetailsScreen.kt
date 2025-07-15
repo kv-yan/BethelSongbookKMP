@@ -4,6 +4,7 @@ import am.bethel.application.common.domain.model.getTitle
 import am.bethel.application.common.presentation.components.ui.FontBold
 import am.bethel.application.common.presentation.components.ui.FontRegular
 import am.bethel.application.settings.domain.model.AppTheme
+import am.bethel.application.settings.presentation.SettingsViewModel
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -46,14 +47,18 @@ import org.koin.compose.koinInject
 fun DetailsScreen(
     modifier: Modifier = Modifier,
     currentIndex: Int,
-    viewModel: DetailsViewModel = koinInject(),
     appTheme: AppTheme,
+    viewModel: DetailsViewModel = koinInject(),
+    settingsViewModel: SettingsViewModel,
     onBackClick: () -> Unit = {},
 ) {
     val currentSong by viewModel.currentSongs.collectAsState()
     val isFavorite by viewModel.isFavorite.collectAsState()
     var isLoadSongDialogVisible by rememberSaveable { mutableStateOf(false) }
     val verticalScrollState = rememberScrollState()
+
+    val currentFontSize by settingsViewModel.fontSize.collectAsState()
+    val themes by settingsViewModel.availableThemes.collectAsState()
 
     LaunchedEffect(Unit) {
         viewModel.loadSong(currentIndex)
@@ -165,7 +170,7 @@ fun DetailsScreen(
                     modifier = modifier,
                     words = words,
                     appTheme = appTheme,
-//                    fontSize = currentFontSize,
+                    fontSize = currentFontSize,
                     onNextSong = viewModel::loadNextSong,
                     onPrevSong = viewModel::loadPrevSong
                 )
