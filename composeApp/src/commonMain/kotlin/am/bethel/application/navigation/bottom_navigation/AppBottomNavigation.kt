@@ -15,7 +15,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import org.jetbrains.compose.resources.painterResource
 
@@ -58,10 +57,10 @@ fun BottomNavigationItem(
     isSelected: Boolean,
     onClick: () -> Unit = {},
 ) {
-
-
     Column(
-        modifier = modifier.clickable { onClick() },
+        modifier = modifier
+            .padding(vertical = 4.dp)
+            .clickable { onClick() },
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Icon(

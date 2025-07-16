@@ -1,5 +1,6 @@
 package am.bethel.application.bookmarked.presentation
 
+import am.bethel.application.common.presentation.components.snackbar.SnackbarState
 import am.bethel.application.common.presentation.components.ui.FontRegular
 import am.bethel.application.settings.domain.model.AppTheme
 import androidx.compose.foundation.layout.fillMaxSize
@@ -36,7 +37,7 @@ fun BookmarkedScreen(
     appTheme: AppTheme,
     viewModel: BookmarkViewModel = koinInject(),
     navigateToDetails: (Int) -> Unit,
-    onSnackbarShown: () -> Unit = {},
+    onSnackbarShown: (SnackbarState) -> Unit = {},
     onBackClick: () -> Unit = {}
 ){
 
@@ -98,8 +99,7 @@ fun BookmarkedScreen(
                     appTheme = appTheme,
                     onClick = { navigateToDetails(it) },
                     onRemoveClick = {
-                        viewModel.removeFavoriteSong(song)
-                        onSnackbarShown()
+                        viewModel.removeFavoriteSong(song, showSnackbar = onSnackbarShown)
                     }
                 )
             }

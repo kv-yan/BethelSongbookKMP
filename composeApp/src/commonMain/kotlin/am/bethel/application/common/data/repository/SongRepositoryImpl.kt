@@ -7,25 +7,17 @@ import am.bethel.application.common.domain.repository.SongRepository
 import am.bethel.songbook.BethelDatabase
 import app.cash.sqldelight.coroutines.asFlow
 import app.cash.sqldelight.coroutines.mapToList
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.launch
 import kotlin.time.Clock
 import kotlin.time.ExperimentalTime
 
 class SongRepositoryImpl(
     private val database: BethelDatabase
 ) : SongRepository {
-
-    init {
-        CoroutineScope(Dispatchers.IO).launch {
-            insertAll()
-        }
-    }
 
     override suspend fun insertAll() {
         SongJsonLoader().load().collect { list ->

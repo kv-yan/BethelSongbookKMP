@@ -3,6 +3,10 @@ package am.bethel.application.bookmarked.presentation
 import am.bethel.application.bookmarked.domain.usecase.GetFavoriteSongsUseCase
 import am.bethel.application.bookmarked.domain.usecase.RemoveFromFavoritesUseCase
 import am.bethel.application.common.domain.model.Song
+import am.bethel.application.common.presentation.components.snackbar.SnackbarState
+import bethelsongbookkmp.composeapp.generated.resources.Res
+import bethelsongbookkmp.composeapp.generated.resources.ic_bookmark_remove
+import bethelsongbookkmp.composeapp.generated.resources.song_unmarked
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
@@ -29,17 +33,15 @@ class BookmarkViewModel(
         }.launchIn(coroutineScope)
     }
 
-    fun removeFavoriteSong(song: Song, /*showSnackbar: (SnackbarState) -> Unit*/) {
+    fun removeFavoriteSong(song: Song, showSnackbar: (SnackbarState) -> Unit) {
         coroutineScope.launch(Dispatchers.IO) {
             removeFromFavoritesUseCase(song)
-/*
             showSnackbar(
                 SnackbarState.Success(
-                    _message = R.string.song_unmarked,
-                    _icon = R.drawable.ic_bookmark_remove
+                    _message = Res.string.song_unmarked,
+                    _icon = Res.drawable.ic_bookmark_remove
                 )
             )
-*/
         }
     }
 }

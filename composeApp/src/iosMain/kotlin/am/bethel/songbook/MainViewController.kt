@@ -14,6 +14,6 @@ fun MainViewController() = ComposeUIViewController {
     }
     initKoin(
         iosModule
-    )
+    ){}
     App(root)
 }
