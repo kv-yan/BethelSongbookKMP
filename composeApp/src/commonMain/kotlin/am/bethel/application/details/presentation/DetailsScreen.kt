@@ -1,6 +1,7 @@
 package am.bethel.application.details.presentation
 
 import am.bethel.application.common.domain.model.getTitle
+import am.bethel.application.common.presentation.components.snackbar.SnackbarState
 import am.bethel.application.common.presentation.components.ui.FontBold
 import am.bethel.application.common.presentation.components.ui.FontRegular
 import am.bethel.application.details.presentation.popap.LoadNextSongDialog
@@ -52,6 +53,7 @@ fun DetailsScreen(
     appTheme: AppTheme,
     viewModel: DetailsViewModel = koinInject(),
     settingsViewModel: SettingsViewModel,
+    onSnackbarShown: (SnackbarState) -> Unit = {},
     onBackClick: () -> Unit = {},
 ) {
     val currentSong by viewModel.currentSongs.collectAsState()
@@ -122,7 +124,7 @@ fun DetailsScreen(
 
                     IconButton(
                         onClick = {
-                            viewModel.toggleFavorite(/*onSnackbarShowed = onSnackbarShowed*/)
+                            viewModel.toggleFavorite(onSnackbarShowed = onSnackbarShown)
                         }
                     ) {
                         Icon(
@@ -198,7 +200,7 @@ fun DetailsScreen(
             onConfirm = {
                 viewModel.loadSongByIndex(
                     index = it,
-//                    onSnackbarShowed = onSnackbarShowed,
+                    onSnackbarShowed = onSnackbarShown,
                     onLoadComplete = {
                         isLoadSongDialogVisible = false
                     }
@@ -206,6 +208,4 @@ fun DetailsScreen(
             }
         )
     }
-
-
 }

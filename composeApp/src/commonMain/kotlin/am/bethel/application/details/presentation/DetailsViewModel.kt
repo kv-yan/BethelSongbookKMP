@@ -4,7 +4,15 @@ import am.bethel.application.bookmarked.domain.usecase.AddToFavoritesUseCase
 import am.bethel.application.bookmarked.domain.usecase.IsFavoriteUseCase
 import am.bethel.application.bookmarked.domain.usecase.RemoveFromFavoritesUseCase
 import am.bethel.application.common.domain.model.Song
+import am.bethel.application.common.presentation.components.snackbar.SnackbarState
 import am.bethel.application.details.domain.usecase.GetSongByIndexUseCase
+import bethelsongbookkmp.composeapp.generated.resources.Res
+import bethelsongbookkmp.composeapp.generated.resources.ic_bookmark_added
+import bethelsongbookkmp.composeapp.generated.resources.ic_bookmark_remove
+import bethelsongbookkmp.composeapp.generated.resources.ic_error
+import bethelsongbookkmp.composeapp.generated.resources.no_song_found_by_number
+import bethelsongbookkmp.composeapp.generated.resources.song_marked
+import bethelsongbookkmp.composeapp.generated.resources.song_unmarked
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
@@ -67,14 +75,7 @@ class DetailsViewModel(
         }
     }
 
-    fun loadPrevSong() {
-        if (_currentIndex.value > MIN_INDEX) {
-            _currentIndex.value--
-            getSongByIndex(_currentIndex.value)
-        }
-    }
-
-    fun toggleFavorite(/*onSnackbarShowed: (SnackbarState) -> Unit*/) {
+    fun toggleFavorite(onSnackbarShowed: (SnackbarState) -> Unit) {
         val song = _currentSong.value ?: return
 
         coroutineScope.launch {
@@ -82,26 +83,29 @@ class DetailsViewModel(
                 // update button state first
                 _isFavorite.value = false
                 removeFromFavoritesUseCase(song)
-                /*
-                                onSnackbarShowed(
-                                    SnackbarState.Success(
-                                        _message = R.string.song_unmarked,
-                                        _icon = R.drawable.ic_bookmark_remove
-                                    )
-                                )
-                */
+                onSnackbarShowed(
+                    SnackbarState.Success(
+                        _message = Res.string.song_unmarked,
+                        _icon = Res.drawable.ic_bookmark_remove
+                    )
+                )
             } else {
                 _isFavorite.value = true
                 addToFavoritesUseCaseImpl(song)
-                /*
-                                onSnackbarShowed(
-                                    SnackbarState.Success(
-                                        _message = R.string.song_marked,
-                                        _icon = R.drawable.ic_bookmark_added
-                                    )
-                                )
-                */
+                onSnackbarShowed(
+                    SnackbarState.Success(
+                        _message = Res.string.song_marked,
+                        _icon = Res.drawable.ic_bookmark_added
+                    )
+                )
             }
+        }
+    }
+
+    fun loadPrevSong() {
+        if (_currentIndex.value > MIN_INDEX) {
+            _currentIndex.value--
+            getSongByIndex(_currentIndex.value)
         }
     }
 
@@ -114,19 +118,17 @@ class DetailsViewModel(
 
     fun loadSongByIndex(
         index: Int,
-        /*onSnackbarShowed: (SnackbarState) -> Unit,*/
+        onSnackbarShowed: (SnackbarState) -> Unit,
         onLoadComplete: () -> Unit = {}
     ) {
         _currentIndex.value = index
         if (index < MIN_INDEX || index > MAX_INDEX) {
-            /*
-                        onSnackbarShowed(
-                            SnackbarState.Error(
-                                _message = R.string.no_song_found_by_number,
-                                _icon = R.drawable.ic_error
-                            )
-                        )
-            */
+            onSnackbarShowed(
+                SnackbarState.Error(
+                    _message = Res.string.no_song_found_by_number,
+                    _icon = Res.drawable.ic_error
+                )
+            )
         } else {
             getSongByIndex(index)
             onLoadComplete()
