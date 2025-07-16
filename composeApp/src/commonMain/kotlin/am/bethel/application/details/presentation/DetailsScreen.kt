@@ -112,7 +112,7 @@ fun DetailsScreen(
 
                     IconButton(
                         onClick = {
-//                            viewModel.shareSong(context)
+                            viewModel.share()
                         }
                     ) {
                         Icon(

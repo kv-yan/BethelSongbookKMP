@@ -6,6 +6,7 @@ import am.bethel.application.bookmarked.domain.usecase.RemoveFromFavoritesUseCas
 import am.bethel.application.common.domain.model.Song
 import am.bethel.application.common.presentation.components.snackbar.SnackbarState
 import am.bethel.application.details.domain.usecase.GetSongByIndexUseCase
+import am.bethel.application.share.domain.usecase.ShareSongUseCase
 import bethelsongbookkmp.composeapp.generated.resources.Res
 import bethelsongbookkmp.composeapp.generated.resources.ic_bookmark_added
 import bethelsongbookkmp.composeapp.generated.resources.ic_bookmark_remove
@@ -30,6 +31,7 @@ class DetailsViewModel(
     private val addToFavoritesUseCaseImpl: AddToFavoritesUseCase,
     private val removeFromFavoritesUseCase: RemoveFromFavoritesUseCase,
     private val isFavoriteUseCase: IsFavoriteUseCase,
+    private val shareSongUseCase: ShareSongUseCase
 ) : KoinComponent {
 
     companion object {
@@ -132,6 +134,12 @@ class DetailsViewModel(
         } else {
             getSongByIndex(index)
             onLoadComplete()
+        }
+    }
+
+    fun share(){
+        coroutineScope.launch {
+            _currentSong.value?.let { shareSongUseCase(it) }
         }
     }
 }

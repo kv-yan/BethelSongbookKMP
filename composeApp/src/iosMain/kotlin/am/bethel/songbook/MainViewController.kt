@@ -3,6 +3,7 @@ package am.bethel.songbook
 import am.bethel.application.common.data.factory.di.iosModule
 import am.bethel.application.koin.initKoin
 import am.bethel.application.navigation.navigation_component.RootComponent
+import am.bethel.application.share.di.shareIosModule
 import androidx.compose.ui.window.ComposeUIViewController
 import androidx.compose.runtime.remember
 import com.arkivanov.decompose.DefaultComponentContext
@@ -13,7 +14,7 @@ fun MainViewController() = ComposeUIViewController {
         RootComponent(DefaultComponentContext(LifecycleRegistry()))
     }
     initKoin(
-        iosModule
-    ){}
+        iosModule, shareIosModule
+    ) {}
     App(root)
 }
