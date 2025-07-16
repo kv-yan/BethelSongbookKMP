@@ -28,13 +28,18 @@ import org.koin.compose.koinInject
 @Composable
 fun App(
     root: RootComponent,
-    settingsViewModel: SettingsViewModel = koinInject()
+    settingsViewModel: SettingsViewModel = koinInject(),
+    onSystemBarColorChange: (isDarkIcons: Boolean) -> Unit = {}
 ) {
     val childStack by root.childStack.subscribeAsState()
     val currentChild = childStack.active.instance
     var isLoadingSongs by remember { mutableStateOf(false) }
     val appTheme by settingsViewModel.uiSettings.collectAsState()
     appTheme?.let { theme ->
+
+        LaunchedEffect(theme){
+            onSystemBarColorChange(theme.darkIcons)
+        }
 
         Scaffold(
             modifier = Modifier.fillMaxSize(),
@@ -99,14 +104,14 @@ fun App(
                 // Show BottomNavigation only if not Details
                 if (currentChild !is RootComponent.Child.Details) {
                     AppBottomNavigation(
-                        currentChild = currentChild, appTheme = theme, onNavigateTo = {
+                        currentChild = currentChild,
+                        appTheme = theme,
+                        onNavigateTo = {
                             root.navigateTo(it)
-                        })
+                        }
+                    )
                 }
             }
         }
-
     }
-
-    // Layout with bottom bar
 }
