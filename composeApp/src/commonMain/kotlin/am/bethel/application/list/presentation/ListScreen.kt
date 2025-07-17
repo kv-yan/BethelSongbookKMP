@@ -23,6 +23,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import bethelsongbookkmp.composeapp.generated.resources.Res
 import bethelsongbookkmp.composeapp.generated.resources.enter_number
@@ -70,7 +72,10 @@ fun ListScreen(
                         Text(stringResource(Res.string.search))
                     }
                 },
-                keyboardOptions = KeyboardOptions.Default,
+                keyboardOptions = KeyboardOptions.Default.copy(
+                    imeAction = ImeAction.Search,
+                    keyboardType = KeyboardType.Number,
+                ),
                 keyboardActions = KeyboardActions(
                     onSearch = {
                         navigateToDetails(searchQuery.toInt())
