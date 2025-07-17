@@ -3,6 +3,7 @@ package am.bethel.songbook
 import am.bethel.application.common.data.factory.di.androidModule
 import am.bethel.application.koin.initKoin
 import am.bethel.application.navigation.navigation_component.RootComponent
+import am.bethel.application.share.di.shareAndroidModule
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.SystemBarStyle
@@ -18,8 +19,10 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val root = retainedComponent { RootComponent(it) }
-        initKoin(androidModule) {
-            androidContext(applicationContext)
+        initKoin(
+            androidModule, shareAndroidModule
+        ) {
+            androidContext(this@MainActivity)
         }
         setContent {
             val changeStatusBarColor: (isDarkIcons: Boolean) -> Unit = { isDarkIcons ->
@@ -34,22 +37,19 @@ class MainActivity : ComponentActivity() {
                             Color.Transparent.hashCode(), // белые иконки
                             Color.White.hashCode() // fallback иконки на старых API
                         )
-                    },
-                    navigationBarStyle = if (isDarkIcons) {
+                    }, navigationBarStyle = if (isDarkIcons) {
                         println("navigation bar color is dark")
                         SystemBarStyle.dark(Color.Transparent.hashCode())
                     } else {
                         println("navigation bar color is light")
                         SystemBarStyle.light(
-                            Color.Transparent.hashCode(),
-                            Color.White.hashCode()
+                            Color.Transparent.hashCode(), Color.White.hashCode()
                         )
                     }
                 )
             }
             App(
-                root = root,
-                onSystemBarColorChange = changeStatusBarColor
+                root = root, onSystemBarColorChange = changeStatusBarColor
             )
         }
     }

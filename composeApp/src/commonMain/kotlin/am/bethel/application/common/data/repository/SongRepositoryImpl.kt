@@ -1,6 +1,7 @@
 package am.bethel.application.common.data.repository
 
 import am.bethel.application.common.data.helper.SongJsonLoader
+import am.bethel.application.common.data.helper.currentTimeMillis
 import am.bethel.application.common.domain.model.Song
 import am.bethel.application.common.domain.model.toSong
 import am.bethel.application.common.domain.repository.SongRepository
@@ -12,7 +13,6 @@ import kotlinx.coroutines.IO
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
-import kotlin.time.Clock
 import kotlin.time.ExperimentalTime
 
 class SongRepositoryImpl(
@@ -53,7 +53,7 @@ class SongRepositoryImpl(
 
     @OptIn(ExperimentalTime::class)
     override suspend fun addToFavorites(song: Song) {
-        val currentTime = Clock.System.now().toEpochMilliseconds()
+        val currentTime = currentTimeMillis()
         database.songsEntityQueries.addToFavorites(
             songId = song.id.toLong(),
             addedAt = currentTime

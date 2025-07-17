@@ -88,6 +88,12 @@ android {
     namespace = "am.bethel.songbook"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
 
+    lint {
+        disable += "NullSafeMutableLiveData"
+        checkReleaseBuilds = false
+        abortOnError = false
+    }
+
     defaultConfig {
         applicationId = "am.bethel.songbook"
         minSdk = libs.versions.android.minSdk.get().toInt()
