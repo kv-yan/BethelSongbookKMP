@@ -7,6 +7,7 @@
     <string name="bookmarked_songs">Էջանշված երգեր</string>
     <string name="enter_number">Գրեք համարը</string>
     <string name="search">Գտնել</string>
+    <string name="example_index">214</string>
     <string name="items_range">%1$s - %2$s</string>
     <string name="search_by_words">Որոնում ըստ բառի</string>
     <string name="nothing_founded">. բառով կամ բառակապակցությամբ երգ չի գտնվել</string>

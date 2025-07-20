@@ -38,11 +38,13 @@ class SongRepositoryImpl(
             .map { list -> list.map { it.toSong() } }
 
 
-    override fun search(query: String): Flow<List<Song>> =
-        database.songsEntityQueries.searchByText(query)
+    override fun search(query: String): Flow<List<Song>>  {
+        val userInput = query.replace(Regex("[^\\p{L}\\p{Nd} ]"), "")
+        return database.songsEntityQueries.searchByText(userInput)
             .asFlow()
             .mapToList(Dispatchers.IO)
             .map { list -> list.map { it.toSong() } }
+    }
 
     override fun getByNumber(songNumber: String): Flow<Song?> = flow {
         val song = database.songsEntityQueries.getBySongNumber(songNumber)

@@ -50,9 +50,9 @@ fun AppInputField(
             unfocusedIndicatorColor = appTheme.unfocusedColor,
             focusedTrailingIconColor = appTheme.primaryTextColor,
             unfocusedTrailingIconColor = appTheme.unfocusedColor,
-            unfocusedLabelColor = appTheme.primaryTextColor,
-            cursorColor = appTheme.primaryColor,
+            unfocusedLabelColor = appTheme.unfocusedColor,
             focusedLabelColor = appTheme.primaryColor,
+            cursorColor = appTheme.primaryColor,
         ),
         label = {
             Text(

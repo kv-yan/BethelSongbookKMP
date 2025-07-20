@@ -1,11 +1,9 @@
 package am.bethel.application.list.presentation.components
 
-import am.betel.songbook.common.presentation.ui.theme.Shape16
 import am.bethel.application.common.presentation.components.ui.FontBold
 import am.bethel.application.common.presentation.components.ui.FontRegular
 import am.bethel.application.settings.domain.model.AppTheme
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -96,11 +94,6 @@ fun ListRageItem(
             LazyVerticalGrid(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .border(
-                        width = 0.5.dp,
-                        color = appTheme.primaryTextColor,
-                        shape = Shape16
-                    )
                     .padding(4.dp)
                     .heightIn(
                         min = 0.dp,

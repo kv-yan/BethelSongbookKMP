@@ -22,8 +22,8 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.sp
 import bethelsongbookkmp.composeapp.generated.resources.Res
 import bethelsongbookkmp.composeapp.generated.resources.enter_next_song_index
+import bethelsongbookkmp.composeapp.generated.resources.example_index
 import bethelsongbookkmp.composeapp.generated.resources.search
-import bethelsongbookkmp.composeapp.generated.resources.search_by_words
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
@@ -34,13 +34,13 @@ fun LoadNextSongDialog(
     onConfirm: (Int) -> Unit = {},
 ) {
     var input by remember { mutableStateOf("") }
+
     AlertDialog(
         modifier = modifier,
         shape = Shape10,
         onDismissRequest = { onDismiss() },
         containerColor = theme.backgroundColor,
         titleContentColor = theme.primaryColor,
-
         title = {
             Text(
                 text = stringResource(Res.string.enter_next_song_index),
@@ -51,7 +51,7 @@ fun LoadNextSongDialog(
         text = {
             AppInputField(
                 modifier = Modifier.fillMaxWidth(),
-                label = stringResource(Res.string.search_by_words),
+                label = stringResource(Res.string.example_index),
                 searchQuery = input,
                 appTheme = theme,
                 onValueChange = { input = it },

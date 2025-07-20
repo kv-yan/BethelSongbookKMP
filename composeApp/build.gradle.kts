@@ -70,6 +70,9 @@ kotlin {
             implementation(libs.datastore)
             implementation(libs.datastore.preferences)
 
+            // splash screen
+            implementation ("androidx.core:core-splashscreen:1.0.0-beta02")
+
         }
 
         iosMain.dependencies {
@@ -98,8 +101,8 @@ android {
         applicationId = "am.bethel.songbook"
         minSdk = libs.versions.android.minSdk.get().toInt()
         targetSdk = libs.versions.android.targetSdk.get().toInt()
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = 2
+        versionName = "2.0"
     }
     packaging {
         resources {
