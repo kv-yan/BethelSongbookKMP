@@ -1,14 +1,32 @@
-This is a Kotlin Multiplatform project targeting Android, iOS.
+# 📖 Worship Songbook (KMP App)
 
-* `/composeApp` is for code that will be shared across your Compose Multiplatform applications.
-  It contains several subfolders:
-  - `commonMain` is for code that’s common for all targets.
-  - Other folders are for Kotlin code that will be compiled for only the platform indicated in the folder name.
-    For example, if you want to use Apple’s CoreCrypto for the iOS part of your Kotlin app,
-    `iosMain` would be the right folder for such calls.
+A simple and powerful spiritual songbook application with 1000+ songs, built using Kotlin Multiplatform for both **Android** and **iOS**.
 
-* `/iosApp` contains iOS applications. Even if you’re sharing your UI with Compose Multiplatform, 
-  you need this entry point for your iOS app. This is also where you should add SwiftUI code for your project.
+https://github.com/user-attachments/assets/c4a6aeb2-a476-4c86-b2d1-c714b4cc53fc
 
+## 🚀 Key Features
 
-Learn more about [Kotlin Multiplatform](https://www.jetbrains.com/help/kotlin-multiplatform-dev/get-started.html)…
+- ✅ Cross-platform app (Android & iOS)
+- 🎵 Browse, search, and read song lyrics (1..1000+)
+- 🌟 Mark favorite songs
+- 🔎 Regex-based smart search
+- 📤 Export/import songs as JSON
+- 📁 Offline-first (data stored locally)
+- 📱 Native UI: Jetpack Compose (Android), SwiftUI-compatible (iOS integration)
+- 🌍 Minimal design & fast performance
+
+---
+
+## 🛠️ Tech Stack
+
+| Purpose             | Technology                |
+|---------------------|---------------------------|
+| Language            | Kotlin Multiplatform (KMP)|
+| UI (Android)        | Jetpack Compose           |
+| UI (iOS)            | SwiftUI / Compose         |
+| DB                  | SQLDelight                |
+| JSON Parsing        | kotlinx.serialization     |
+| Dependency Mgmt     | Koin                      |
+| Concurrency         | Kotlin Coroutines , Flow  |
+| Sharing             | KMP Share / Platform APIs |
+| Build Tools         | Gradle (KMP DSL)          |
