@@ -36,7 +36,7 @@ fun SearchSongItem(
 ) {
 
     Row(
-        modifier = modifier.clickable { onClick(song.id) },
+        modifier = modifier.clickable { onClick(song.songNumber.toInt()) },
         verticalAlignment = Alignment.CenterVertically
     ) {
         Box(

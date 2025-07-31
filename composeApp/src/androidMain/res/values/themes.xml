@@ -3,7 +3,7 @@
 
     <style name="Theme.Songbook" parent="android:Theme.Material.Light.NoActionBar">
         <item name="android:windowSplashScreenBackground">#fff</item>
-        <item name="android:windowSplashScreenAnimatedIcon">@drawable/ic_app</item>
+        <item name="android:windowSplashScreenAnimatedIcon">@mipmap/ic_launcher</item>
         <item name="postSplashScreenTheme">@style/Theme.Songbook</item>
     </style>
 </resources>
