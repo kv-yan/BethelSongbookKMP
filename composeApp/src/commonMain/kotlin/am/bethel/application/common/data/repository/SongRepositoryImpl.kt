@@ -38,12 +38,13 @@ class SongRepositoryImpl(
             .map { list -> list.map { it.toSong() } }
 
 
-    override fun search(query: String): Flow<List<Song>>  {
-        val userInput = query.replace(Regex("[^\\p{L}\\p{Nd} ]"), "")
-        return database.songsEntityQueries.searchByText(userInput)
-            .asFlow()
-            .mapToList(Dispatchers.IO)
-            .map { list -> list.map { it.toSong() } }
+    override fun search(query: String): Flow<List<Song>> {
+        val normalizedQuery = query.normalizeForSearch()
+        return getAll().map { list ->
+            list.filter { song ->
+                song.songWords.normalizeForSearch().contains(normalizedQuery)
+            }
+        }
     }
 
     override fun getByNumber(songNumber: String): Flow<Song?> = flow {
@@ -76,4 +77,8 @@ class SongRepositoryImpl(
         database.songsEntityQueries.isFavorite(song.id.toLong())
             .asFlow()
             .map { it.executeAsOne() }
+
+   private fun String.normalizeForSearch(): String =
+        this.lowercase().replace(Regex("[^\\p{L}\\p{Nd}]"), "")
+
 }
