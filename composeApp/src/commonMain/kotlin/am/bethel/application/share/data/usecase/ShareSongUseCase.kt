@@ -5,9 +5,10 @@ import am.bethel.application.share.domain.repository.ShareHelper
 import am.bethel.application.share.domain.usecase.ShareSongUseCase
 
 class ShareSongUseCaseImpl(
-    private val shareHelper: ShareHelper
+    private val shareHelper: ShareHelper,
 ) : ShareSongUseCase {
     override suspend fun invoke(song: Song) {
-        shareHelper.shareText(song.songWords)
+        val songContent = "Երգ ${song.songNumber}\n${song.songWords}"
+        shareHelper.shareText(songContent)
     }
 }
