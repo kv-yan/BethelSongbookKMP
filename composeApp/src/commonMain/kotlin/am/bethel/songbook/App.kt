@@ -153,7 +153,7 @@ fun App(
                                         is RootComponent.Child.List -> ListScreen(
                                             appTheme = theme,
                                             navigateToDetails = {
-                                                if (it >= 0 && it <= 1000)
+                                                if (it >= 1 && it <= 1000)
                                                     root.navigateTo(
                                                         RootComponent.Configuration.Details(
                                                             it.toString()
