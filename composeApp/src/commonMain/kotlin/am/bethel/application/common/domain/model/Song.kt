@@ -1,5 +1,6 @@
 package am.bethel.application.common.domain.model
 
+import am.bethel.application.common.ext.removeSongHeader
 import am.bethel.songbook.Song as SongEntity
 
 
@@ -16,7 +17,7 @@ data class Song(
 fun SongEntity.toSong() = Song(
     id = this.id.toInt(),
     songNumber = this.songNumber,
-    songWords = this.songWords,
+    songWords = this.songWords.removeSongHeader(),
 )
 
 fun Song.getTitle(): String {

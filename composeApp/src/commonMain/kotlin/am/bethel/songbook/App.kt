@@ -128,6 +128,7 @@ fun App(
                                     when (val component = child.instance) {
                                         is RootComponent.Child.Bookmarked ->
                                             BookmarkedScreen(
+                                                modifier = Modifier.fillMaxSize(),
                                                 appTheme = theme,
                                                 onBackClick = { root.navigateBack() },
                                                 onSnackbarShown = onSnackbarShown,

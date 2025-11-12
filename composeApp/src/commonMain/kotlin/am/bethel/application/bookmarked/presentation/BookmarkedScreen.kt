@@ -3,6 +3,7 @@ package am.bethel.application.bookmarked.presentation
 import am.bethel.application.common.presentation.components.snackbar.SnackbarState
 import am.bethel.application.common.presentation.components.ui.FontRegular
 import am.bethel.application.settings.domain.model.AppTheme
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -38,13 +39,13 @@ fun BookmarkedScreen(
     viewModel: BookmarkViewModel = koinInject(),
     navigateToDetails: (Int) -> Unit,
     onSnackbarShown: (SnackbarState) -> Unit = {},
-    onBackClick: () -> Unit = {}
-){
+    onBackClick: () -> Unit = {},
+) {
 
     val songs by viewModel.favoriteSongs.collectAsState()
 
     Scaffold(
-        modifier = modifier.fillMaxSize(),
+        modifier = Modifier.fillMaxSize(),
         containerColor = appTheme.backgroundColor,
         topBar = {
             TopAppBar(
@@ -74,34 +75,41 @@ fun BookmarkedScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(innerPadding)
-                    .padding(horizontal = 16.dp, vertical = 8.dp),
+                    .padding(
+                        horizontal = 16.dp,
+                        vertical = 8.dp
+                    ),
                 text = stringResource(Res.string.no_bookmarked_songs),
                 fontFamily = FontRegular(),
                 color = appTheme.primaryColor,
                 fontSize = 24.sp,
                 textAlign = TextAlign.Center
-
             )
 
         } else LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding)
-                .padding(bottom = 64.dp),
+            modifier = Modifier.fillMaxSize(),
         ) {
+            item { Spacer(modifier = Modifier.padding(top = 8.dp)) }
             items(
-                items = songs,
-                key = { it.id }
-            ) { song ->
+                items = songs, key = { it.id }) { song ->
                 BookmarkedSongItem(
-                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
+                    modifier = Modifier.padding(
+                        horizontal = 16.dp,
+                        vertical = 8.dp
+                    ),
                     song = song,
                     appTheme = appTheme,
                     onClick = { navigateToDetails(it) },
                     onRemoveClick = {
-                        viewModel.removeFavoriteSong(song, showSnackbar = onSnackbarShown)
-                    }
-                )
+                        viewModel.removeFavoriteSong(
+                            song = song,
+                            showSnackbar = onSnackbarShown
+                        )
+                    })
+            }
+
+            item {
+                Spacer(modifier = Modifier.padding(bottom = 48.dp))
             }
         }
     }

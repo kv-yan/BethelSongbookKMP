@@ -31,7 +31,7 @@ class DetailsViewModel(
     private val addToFavoritesUseCaseImpl: AddToFavoritesUseCase,
     private val removeFromFavoritesUseCase: RemoveFromFavoritesUseCase,
     private val isFavoriteUseCase: IsFavoriteUseCase,
-    private val shareSongUseCase: ShareSongUseCase
+    private val shareSongUseCase: ShareSongUseCase,
 ) : KoinComponent {
 
     companion object {
@@ -59,15 +59,13 @@ class DetailsViewModel(
         getSongByIndexUseCase(index).onEach {
             _currentSong.value = it
             it?.let { song -> observeFavoriteState(song) }
-        }.launchIn(coroutineScope)
-    }
-
-    fun loadSong(index: Int) {
-        getSongByIndexUseCase(index).onEach { song ->
-            _currentSong.value = song
         }.catch {
             println("error loading song :: $it")
         }.launchIn(scope = coroutineScope)
+    }
+
+    fun loadSong(index: Int) {
+        getSongByIndex(index)
     }
 
     fun loadNextSong() {
@@ -121,7 +119,7 @@ class DetailsViewModel(
     fun loadSongByIndex(
         index: Int,
         onSnackbarShowed: (SnackbarState) -> Unit,
-        onLoadComplete: () -> Unit = {}
+        onLoadComplete: () -> Unit = {},
     ) {
         _currentIndex.value = index
         if (index < MIN_INDEX || index > MAX_INDEX) {
@@ -137,7 +135,7 @@ class DetailsViewModel(
         }
     }
 
-    fun share(){
+    fun share() {
         coroutineScope.launch {
             _currentSong.value?.let { shareSongUseCase(it) }
         }
