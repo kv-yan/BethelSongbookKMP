@@ -12,7 +12,6 @@ class SettingsRepositoryImpl(
     val dataStore: DataStore<Preferences>,
 ) : SettingsRepository {
 
-
     override val themeIndexFlow: Flow<Int> = dataStore.data.map { prefs ->
         prefs[PreferencesKeys.THEME_INDEX] ?: 0
     }
@@ -22,6 +21,10 @@ class SettingsRepositoryImpl(
     }
     override val dataVersionFlow: Flow<Int> = dataStore.data.map { prefs ->
         prefs[PreferencesKeys.DB_VERSION] ?: 1
+    }
+
+    override val isScreenKeepAwakeFlow: Flow<Boolean> = dataStore.data.map { prefs ->
+        prefs[PreferencesKeys.SCREEN_KEEP_AWAKE] ?: false
     }
 
 
@@ -35,5 +38,9 @@ class SettingsRepositoryImpl(
 
     override suspend fun setDataVersion(value: Int) {
         dataStore.edit { it[PreferencesKeys.DB_VERSION] = value }
+    }
+
+    override suspend fun setScreenKeepAwake(value: Boolean) {
+        dataStore.edit { it[PreferencesKeys.SCREEN_KEEP_AWAKE] = value }
     }
 }

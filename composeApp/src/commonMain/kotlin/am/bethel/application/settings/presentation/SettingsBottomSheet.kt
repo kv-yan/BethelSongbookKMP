@@ -2,11 +2,14 @@ package am.bethel.application.settings.presentation
 
 import am.betel.songbook.common.presentation.ui.theme.Shape10
 import am.bethel.application.settings.domain.model.AppTheme
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Checkbox
+import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
@@ -19,6 +22,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import bethelsongbookkmp.composeapp.generated.resources.Res
 import bethelsongbookkmp.composeapp.generated.resources.change_font_size
+import bethelsongbookkmp.composeapp.generated.resources.keep_screen_awake
 import org.jetbrains.compose.resources.stringResource
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -29,6 +33,8 @@ fun SettingsBottomSheet(
     appTheme: AppTheme,
     themes: List<AppTheme>,
     currentFontSize: Float = 16f,
+    isScreenKeepAwake: Boolean = false,
+    setScreenKeepAwake: (Boolean) -> Unit = {},
     onFontSizeIncrease: () -> Unit = {},
     onFontSizeDecrease: () -> Unit = {},
     onThemeChange: (AppTheme) -> Unit = {},
@@ -80,6 +86,29 @@ fun SettingsBottomSheet(
                 ) {
                     onFontSizeIncrease()
                 }
+            }
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 0.dp)
+                    .clickable{setScreenKeepAwake(!isScreenKeepAwake)},
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+
+                Checkbox(
+                    checked = isScreenKeepAwake,
+                    onCheckedChange = setScreenKeepAwake,
+                    colors = CheckboxDefaults.colors(
+                        checkedColor = appTheme.primaryColor,
+                        uncheckedColor = appTheme.unfocusedColor
+                    )
+                )
+
+                Text(
+                    text = stringResource(Res.string.keep_screen_awake),
+                    color = appTheme.primaryTextColor
+                )
             }
 
             ThemeController(

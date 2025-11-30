@@ -64,6 +64,8 @@ fun DetailsScreen(
 
     val currentFontSize by settingsViewModel.fontSize.collectAsState()
     val themes by settingsViewModel.availableThemes.collectAsState()
+    val isScreenKeepAwoken by settingsViewModel.isScreenKeepAwake.collectAsState()
+
 
     LaunchedEffect(Unit) {
         viewModel.loadSong(currentIndex)
@@ -188,6 +190,8 @@ fun DetailsScreen(
         appTheme = appTheme,
         themes = themes,
         currentFontSize = currentFontSize,
+        isScreenKeepAwake = isScreenKeepAwoken,
+        setScreenKeepAwake = settingsViewModel::setScreenKeepAwake,
         onFontSizeIncrease = settingsViewModel::increment,
         onFontSizeDecrease = settingsViewModel::decrement,
         onThemeChange = settingsViewModel::setUiSetting

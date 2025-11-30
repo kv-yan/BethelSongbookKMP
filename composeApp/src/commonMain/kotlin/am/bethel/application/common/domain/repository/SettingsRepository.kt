@@ -6,8 +6,10 @@ interface SettingsRepository {
     val themeIndexFlow: Flow<Int>
     val fontSizeFlow: Flow<Float>
     val dataVersionFlow: Flow<Int>
+    val isScreenKeepAwakeFlow: Flow<Boolean>
 
     suspend fun setThemeIndex(value: Int)
     suspend fun setFontSize(value: Float)
     suspend fun setDataVersion(value: Int)
+    suspend fun setScreenKeepAwake(value: Boolean)
 }

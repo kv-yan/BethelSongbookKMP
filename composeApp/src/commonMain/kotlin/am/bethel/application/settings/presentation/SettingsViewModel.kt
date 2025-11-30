@@ -4,8 +4,10 @@ import am.bethel.application.settings.domain.model.AppTheme
 import am.bethel.application.settings.domain.usecase.ChangeFontSizeUseCase
 import am.bethel.application.settings.domain.usecase.ChangeThemeIndexUseCase
 import am.bethel.application.settings.domain.usecase.GetFontSizeUseCase
+import am.bethel.application.settings.domain.usecase.GetScreenAwakeUseCase
 import am.bethel.application.settings.domain.usecase.GetThemeIndexUseCase
 import am.bethel.application.settings.domain.usecase.InsertAllSongToDbUseCase
+import am.bethel.application.settings.domain.usecase.SetScreenAwakeUseCase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
@@ -22,9 +24,11 @@ class SettingsViewModel(
     private val changeFontSizeUseCase: ChangeFontSizeUseCase,
     getThemeIndexUseCase: GetThemeIndexUseCase,
     private val changeThemeIndexUseCase: ChangeThemeIndexUseCase,
-    insertAllSongToDbUseCase: InsertAllSongToDbUseCase
+    insertAllSongToDbUseCase: InsertAllSongToDbUseCase,
+    getScreenAwakeUseCase: GetScreenAwakeUseCase,
+    private val setScreenAwakeUseCase: SetScreenAwakeUseCase,
 
-) : KoinComponent {
+    ) : KoinComponent {
 
     val viewModelScope = CoroutineScope(Dispatchers.IO)
 
@@ -37,6 +41,9 @@ class SettingsViewModel(
     private val _availableThemes = MutableStateFlow<List<AppTheme>>(AppTheme.entries)
     val availableThemes = _availableThemes.asStateFlow()
 
+    private val _isScreenKeepAwake = MutableStateFlow(false)
+    val isScreenKeepAwake = _isScreenKeepAwake
+
     init {
         viewModelScope.launch(Dispatchers.IO) {
             insertAllSongToDbUseCase()
@@ -48,6 +55,10 @@ class SettingsViewModel(
 
         getThemeIndexUseCase().onEach {
             _appTheme.value = _availableThemes.value[it]
+        }.launchIn(viewModelScope)
+
+        getScreenAwakeUseCase.invoke().onEach {
+            _isScreenKeepAwake.value = it
         }.launchIn(viewModelScope)
 
     }
@@ -66,11 +77,14 @@ class SettingsViewModel(
         }
     }
 
-
     fun setUiSetting(appTheme: AppTheme) {
         val index = _availableThemes.value.indexOf(appTheme)
         viewModelScope.launch(Dispatchers.IO) {
             changeThemeIndexUseCase.invoke(index)
         }
+    }
+
+    fun setScreenKeepAwake(isKeepAwake: Boolean) = viewModelScope.launch {
+        setScreenAwakeUseCase.invoke(isKeepAwake)
     }
 }
