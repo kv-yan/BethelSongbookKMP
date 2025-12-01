@@ -62,6 +62,7 @@ fun DetailsScreen(
     val bottomSheetExpanded = rememberSaveable { mutableStateOf(false) }
     val verticalScrollState = rememberScrollState()
 
+
     val currentFontSize by settingsViewModel.fontSize.collectAsState()
     val themes by settingsViewModel.availableThemes.collectAsState()
     val isScreenKeepAwoken by settingsViewModel.isScreenKeepAwake.collectAsState()

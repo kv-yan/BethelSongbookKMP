@@ -27,8 +27,8 @@ class SettingsViewModel(
     insertAllSongToDbUseCase: InsertAllSongToDbUseCase,
     getScreenAwakeUseCase: GetScreenAwakeUseCase,
     private val setScreenAwakeUseCase: SetScreenAwakeUseCase,
+) : KoinComponent {
 
-    ) : KoinComponent {
 
     val viewModelScope = CoroutineScope(Dispatchers.IO)
 
@@ -59,8 +59,8 @@ class SettingsViewModel(
 
         getScreenAwakeUseCase.invoke().onEach {
             _isScreenKeepAwake.value = it
+            println("Screen awake: $it")
         }.launchIn(viewModelScope)
-
     }
 
     fun increment() {

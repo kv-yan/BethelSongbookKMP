@@ -86,30 +86,33 @@ fun BookmarkedScreen(
                 textAlign = TextAlign.Center
             )
 
-        } else LazyColumn(
-            modifier = Modifier.fillMaxSize(),
-        ) {
-            item { Spacer(modifier = Modifier.padding(top = 8.dp)) }
-            items(
-                items = songs, key = { it.id }) { song ->
-                BookmarkedSongItem(
-                    modifier = Modifier.padding(
-                        horizontal = 16.dp,
-                        vertical = 8.dp
-                    ),
-                    song = song,
-                    appTheme = appTheme,
-                    onClick = { navigateToDetails(it) },
-                    onRemoveClick = {
-                        viewModel.removeFavoriteSong(
-                            song = song,
-                            showSnackbar = onSnackbarShown
-                        )
-                    })
-            }
+        } else {
+            songs
+            LazyColumn(
+                modifier = Modifier.fillMaxSize(),
+            ) {
+                item { Spacer(modifier = Modifier.padding(top = innerPadding.calculateTopPadding())) }
+                items(
+                    items = songs, key = { it.id }) { song ->
+                    BookmarkedSongItem(
+                        modifier = Modifier.padding(
+                            horizontal = 16.dp,
+                            vertical = 8.dp
+                        ),
+                        song = song,
+                        appTheme = appTheme,
+                        onClick = { navigateToDetails(it) },
+                        onRemoveClick = {
+                            viewModel.removeFavoriteSong(
+                                song = song,
+                                showSnackbar = onSnackbarShown
+                            )
+                        })
+                }
 
-            item {
-                Spacer(modifier = Modifier.padding(bottom = 48.dp))
+                item {
+                    Spacer(modifier = Modifier.padding(bottom = 48.dp))
+                }
             }
         }
     }
