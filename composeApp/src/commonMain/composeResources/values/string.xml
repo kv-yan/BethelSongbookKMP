@@ -20,5 +20,7 @@
     <string name="change_font_size">Փոխեք տառաչափը։</string>
     <string name="enter_next_song_index">Գրեք հաջորդ երգի համարը</string>
     <string name="keep_screen_awake">Պահել էկրանը միացված</string>
+    <string name="setting_title_design_settings">Դիզայնի կարգավորումներ</string>
+    <string name="setting_title_screen_settings">Էկրանի կարգավորումներ</string>
 
 </resources>
