@@ -16,6 +16,7 @@ import org.koin.core.KoinApplication
 import org.koin.core.context.startKoin
 import org.koin.core.module.Module
 
+// iso
 actual fun initKoin(vararg modules: Module, appDeclaration: KoinApplication.() -> Unit ) {
     startKoin {
         appDeclaration()

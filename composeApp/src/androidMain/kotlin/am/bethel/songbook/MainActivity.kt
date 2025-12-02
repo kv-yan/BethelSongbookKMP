@@ -3,6 +3,7 @@ package am.bethel.songbook
 import am.bethel.application.common.data.factory.di.androidModule
 import am.bethel.application.koin.initKoin
 import am.bethel.application.navigation.navigation_component.RootComponent
+import am.bethel.application.screen_awake.ScreenAwakeController
 import am.bethel.application.share.di.shareAndroidModule
 import android.os.Bundle
 import android.view.View
@@ -21,14 +22,17 @@ import org.koin.android.ext.koin.androidContext
 
 @OptIn(ExperimentalDecomposeApi::class)
 class MainActivity : ComponentActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val root = retainedComponent { RootComponent(it) }
+        val screenAwakeController = ScreenAwakeController(this)
         initKoin(
             androidModule, shareAndroidModule
         ) {
             androidContext(this@MainActivity)
         }
+
         val isSplashLoaded = MutableStateFlow(false)
         setContent {
             LaunchedEffect(Unit) {
@@ -56,7 +60,11 @@ class MainActivity : ComponentActivity() {
             }
 
             App(
-                root = root, onSystemBarColorChange = changeStatusBarColor
+                root = root,
+                onSystemBarColorChange = changeStatusBarColor,
+                keepScreenOn = {
+                    screenAwakeController.keepScreenOn(it)
+                }
             )
         }
 

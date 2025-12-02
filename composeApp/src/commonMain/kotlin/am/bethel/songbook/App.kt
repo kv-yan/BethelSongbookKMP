@@ -48,7 +48,8 @@ import org.koin.compose.koinInject
 fun App(
     root: RootComponent,
     settingsViewModel: SettingsViewModel = koinInject(),
-    onSystemBarColorChange: (isDarkIcons: Boolean) -> Unit = {}
+    onSystemBarColorChange: (isDarkIcons: Boolean) -> Unit = {},
+    keepScreenOn: (Boolean) -> Unit = {}
 ) {
     val childStack by root.childStack.subscribeAsState()
     val currentChild = childStack.active.instance
@@ -57,6 +58,9 @@ fun App(
     val appTheme by settingsViewModel.uiSettings.collectAsState()
     val onSnackbarShown: (SnackbarState) -> Unit = { snackBars.add(it) }
     var isShowingSplash by remember { mutableStateOf(false) }
+    val isScreenKeepAwoken by settingsViewModel.isScreenKeepAwake.collectAsState()
+
+
     // Animate alpha (fade in)
     val imageSize by animateDpAsState(
         targetValue = if (isShowingSplash) 250.dp else 120.dp,
@@ -77,6 +81,11 @@ fun App(
     LaunchedEffect(Unit) {
         delay(700)
         isShowingSplash = false
+    }
+
+    LaunchedEffect(isScreenKeepAwoken){
+        println("effect worked $isScreenKeepAwoken")
+        keepScreenOn(isScreenKeepAwoken)
     }
 
     appTheme?.let { theme ->
