@@ -1,14 +1,9 @@
 package am.bethel.application.settings.domain.model
 
-import am.bethel.application.common.presentation.components.ui.Blue700
-import am.bethel.application.common.presentation.components.ui.Pink40
-import am.bethel.application.common.presentation.components.ui.Purple40
-import am.bethel.application.common.presentation.components.ui.RoseRed
-import am.bethel.application.common.presentation.components.ui.TestBue
-import am.bethel.application.common.presentation.components.ui.TestCoral
+import am.bethel.application.common.presentation.components.ui.TestBlue
 import am.bethel.application.common.presentation.components.ui.TestGreen
-import am.bethel.application.common.presentation.components.ui.gray_backgrount1
-import am.bethel.application.common.presentation.components.ui.gray_backgrount2
+import am.bethel.application.common.presentation.components.ui.TestOrange
+import am.bethel.application.common.presentation.components.ui.GrayBackground2
 import androidx.compose.ui.graphics.Color
 
 enum class AppTheme(
@@ -19,74 +14,53 @@ enum class AppTheme(
     val primaryColor: Color,
     val darkIcons: Boolean,
 ) {
-    LightBlue700(
+    LightOrange(
         backgroundColor = Color.White,
         primaryTextColor = Color.Black,
         secondaryTextColor = Color.Gray,
         unfocusedColor = Color.LightGray,
-        primaryColor = Blue700,
+        primaryColor = TestOrange,
         darkIcons = true
     ),
-
-    LightRed(
-        backgroundColor = Color.White,
-        primaryTextColor = Color.Black,
-        secondaryTextColor = Color.Gray,
-        unfocusedColor = Color.LightGray,
-        primaryColor = RoseRed,
-        darkIcons = true
-    ),
-
-    LightPurple40(
-        backgroundColor = Color.White,
-        primaryTextColor = Color.Black,
-        secondaryTextColor = Color.Gray,
-        unfocusedColor = Color.LightGray,
-        primaryColor = Purple40,
-        darkIcons = true
-    ),
-
-    LightPink40(
-        backgroundColor = Color.White,
-        primaryTextColor = Color.Black,
-        secondaryTextColor = Color.Gray,
-        unfocusedColor = Color.LightGray,
-        primaryColor = Pink40,
-        darkIcons = true
-    ),
-
-    LightCoral(
-        backgroundColor = Color.White,
-        primaryTextColor = Color.Black,
-        secondaryTextColor = Color.Gray,
-        unfocusedColor = Color.LightGray,
-        primaryColor = TestCoral,
-        darkIcons = true
-    ),
-
-    DarkLightGray(
-        backgroundColor = gray_backgrount1,
+    DarkDarkGrayOrange(
+        backgroundColor = GrayBackground2,
         primaryTextColor = Color.White,
         secondaryTextColor = Color.White,
         unfocusedColor = Color.LightGray,
-        primaryColor = TestBue,
+        primaryColor = TestOrange,
         darkIcons = false
     ),
-    DarkDarkGrayBlue(
-        backgroundColor = gray_backgrount2,
-        primaryTextColor = Color.White,
-        secondaryTextColor = Color.White,
+    LightGreen(
+        backgroundColor = Color.White,
+        primaryTextColor = Color.Black,
+        secondaryTextColor = Color.Gray,
         unfocusedColor = Color.LightGray,
-        primaryColor = TestBue,
-        darkIcons = false
+        primaryColor = TestGreen,
+        darkIcons = true
     ),
-    DarkDarkGrayGreen(
-        backgroundColor = gray_backgrount2,
+    DarkGreen(
+        backgroundColor = GrayBackground2,
         primaryTextColor = Color.White,
         secondaryTextColor = Color.White,
         unfocusedColor = Color.LightGray,
         primaryColor = TestGreen,
         darkIcons = false
     ),
+    LightBlue(
+        backgroundColor = Color.White,
+        primaryTextColor = Color.Black,
+        secondaryTextColor = Color.Gray,
+        unfocusedColor = Color.LightGray,
+        primaryColor = TestBlue,
+        darkIcons = true
+    ),
 
+    DarkDarkGrayBlue(
+        backgroundColor = GrayBackground2,
+        primaryTextColor = Color.White,
+        secondaryTextColor = Color.White,
+        unfocusedColor = Color.LightGray,
+        primaryColor = TestBlue,
+        darkIcons = false
+    ),
 }
