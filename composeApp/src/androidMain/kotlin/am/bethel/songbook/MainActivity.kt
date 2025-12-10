@@ -13,6 +13,10 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.graphics.Color
 import com.arkivanov.decompose.ExperimentalDecomposeApi
 import com.arkivanov.decompose.retainedComponent
+import com.google.android.play.core.appupdate.AppUpdateManagerFactory
+import com.google.android.play.core.appupdate.AppUpdateOptions
+import com.google.android.play.core.install.model.AppUpdateType
+import com.google.android.play.core.install.model.UpdateAvailability
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 
@@ -24,6 +28,39 @@ class MainActivity : ComponentActivity() {
         val root = retainedComponent { RootComponent(it) }
         val screenAwakeController = ScreenAwakeController(this)
         val isSplashLoaded = MutableStateFlow(false)
+
+        val updateManager = AppUpdateManagerFactory.create(this)
+
+        updateManager.appUpdateInfo.addOnSuccessListener { info ->
+            // Immediate update
+            if (info.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE &&
+                info.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE)
+            ) {
+                val options = AppUpdateOptions.newBuilder(AppUpdateType.IMMEDIATE).build()
+
+                updateManager.startUpdateFlowForResult(
+                    info,
+                    this,
+                    options,
+                    1001
+                )
+            }
+
+            // Flexible update
+            if (info.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE &&
+                info.isUpdateTypeAllowed(AppUpdateType.FLEXIBLE)
+            ) {
+                val options = AppUpdateOptions.newBuilder(AppUpdateType.FLEXIBLE).build()
+
+                updateManager.startUpdateFlowForResult(
+                    info,
+                    this,
+                    options,
+                    1002
+                )
+            }
+        }
+
         setContent {
             LaunchedEffect(Unit) {
                 delay(1000)

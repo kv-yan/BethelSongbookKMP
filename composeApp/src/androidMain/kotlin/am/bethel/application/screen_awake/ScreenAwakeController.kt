@@ -10,10 +10,8 @@ actual class ScreenAwakeController(
         activity.runOnUiThread {
             try {
                 if (enabled) {
-                    println("Keep screen on")
                     activity.window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
                 } else {
-                    println("Keep screen off")
                     activity.window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
                 }
             } catch (e: Exception) {

@@ -6,7 +6,6 @@ import org.koin.dsl.module
 
 val shareIosModule = module {
     single<ShareHelper> {
-        println("helper instance created")
         ShareHelperIos()
     }
 }

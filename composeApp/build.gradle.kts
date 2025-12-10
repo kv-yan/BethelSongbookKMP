@@ -71,7 +71,11 @@ kotlin {
             implementation(libs.datastore.preferences)
 
             // splash screen
-            implementation ("androidx.core:core-splashscreen:1.0.0-beta02")
+            implementation (libs.androidx.core.splashscreen)
+
+            // play store updates
+            implementation(libs.app.update)
+            implementation(libs.app.update.ktx)
 
         }
 

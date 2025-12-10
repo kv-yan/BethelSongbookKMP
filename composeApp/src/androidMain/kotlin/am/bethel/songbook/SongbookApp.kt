@@ -16,4 +16,5 @@ class SongbookApp: Application() {
         ) {
             androidContext(this@SongbookApp)
         }
-    }}
+    }
+}
