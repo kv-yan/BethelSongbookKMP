@@ -60,7 +60,7 @@ fun SwipeableSongText(
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .heightIn(min = 560.dp, max = 1500.dp)
+                .heightIn(min = 560.dp, max = 5000.dp)
         ) {
             Text(
                 text = words,
