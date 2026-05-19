@@ -136,7 +136,7 @@ class DetailsViewModel(
     }
 
     fun share() {
-        coroutineScope.launch {
+        coroutineScope.launch(Dispatchers.Main) {
             _currentSong.value?.let { shareSongUseCase(it) }
         }
     }

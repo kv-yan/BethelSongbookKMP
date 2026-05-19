@@ -52,7 +52,7 @@ kotlin {
 
             // decompose navigation
             implementation(libs.decompose)
-            implementation(libs.decompose.jetbrains)
+            implementation(libs.decompose.extensions.compose)
 
             // serialization
             implementation(libs.kotlinx.serialization.json)
@@ -75,7 +75,6 @@ kotlin {
 
             // play store updates
             implementation(libs.app.update)
-            implementation(libs.app.update.ktx)
 
         }
 
@@ -105,8 +104,8 @@ android {
         applicationId = "am.bethel.songbook"
         minSdk = libs.versions.android.minSdk.get().toInt()
         targetSdk = libs.versions.android.targetSdk.get().toInt()
-        versionCode = 8
-        versionName = "8.0"
+        versionCode = 9
+        versionName = "9.0"
     }
     packaging {
         resources {
