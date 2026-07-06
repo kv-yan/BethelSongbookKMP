@@ -9,7 +9,7 @@ import platform.Foundation.dataWithContentsOfFile
 
 // ios
 actual suspend fun readSongsJson(): String {
-    val path = NSBundle.mainBundle.pathForResource("songs", "json")!!
+    val path = NSBundle.mainBundle.pathForResource("new_songs", "json")!!
     val data = NSData.dataWithContentsOfFile(path)!!
     return NSString.create(data, NSUTF8StringEncoding) as String
 }

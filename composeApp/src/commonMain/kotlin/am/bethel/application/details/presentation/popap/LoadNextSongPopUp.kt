@@ -71,7 +71,7 @@ fun LoadNextSongDialog(
                             contentColor = if (input.isNotEmpty()) theme.primaryColor else theme.unfocusedColor,
                             disabledContentColor = theme.unfocusedColor
                         ),
-                        onClick = { onConfirm(input.toInt()) }) {
+                        onClick = { input.toIntOrNull()?.let { onConfirm(it) } }) {
                         Text(text = stringResource(Res.string.search))
                     }
                 },
@@ -81,7 +81,7 @@ fun LoadNextSongDialog(
                 ),
                 keyboardActions = KeyboardActions(
                     onSearch = {
-                        onConfirm(input.toInt())
+                        input.toIntOrNull()?.let { onConfirm(it) }
                     }
                 )
             )
