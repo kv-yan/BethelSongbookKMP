@@ -78,7 +78,7 @@ fun ListScreen(
                 ),
                 keyboardActions = KeyboardActions(
                     onSearch = {
-                        navigateToDetails(searchQuery.toInt())
+                        searchQuery.toIntOrNull()?.let { navigateToDetails(it) }
                     }
                 )
             )

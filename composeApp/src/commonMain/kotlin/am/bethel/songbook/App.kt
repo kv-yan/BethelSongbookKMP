@@ -7,6 +7,7 @@ import am.bethel.application.common.presentation.components.ui.PurpleGrey40
 import am.bethel.application.details.presentation.DetailsScreen
 import am.bethel.application.list.presentation.ListScreen
 import am.bethel.application.navigation.bottom_navigation.AppBottomNavigation
+import am.bethel.application.navigation.bottom_navigation.BottomNavItem
 import am.bethel.application.navigation.navigation_component.RootComponent
 import am.bethel.application.search.presentation.SearchScreen
 import am.bethel.application.settings.presentation.SettingsViewModel
@@ -34,14 +35,23 @@ import androidx.compose.ui.zIndex
 import bethelsongbookkmp.composeapp.generated.resources.Res
 import bethelsongbookkmp.composeapp.generated.resources.ic_app_logo
 import bethelsongbookkmp.composeapp.generated.resources.no_song_found_by_number
+import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.unit.IntOffset
 import com.arkivanov.decompose.ExperimentalDecomposeApi
 import com.arkivanov.decompose.extensions.compose.stack.Children
-import com.arkivanov.decompose.extensions.compose.stack.animation.slide
+import com.arkivanov.decompose.extensions.compose.stack.animation.Direction
+import com.arkivanov.decompose.extensions.compose.stack.animation.predictiveback.predictiveBackAnimation
 import com.arkivanov.decompose.extensions.compose.stack.animation.stackAnimation
+import com.arkivanov.decompose.extensions.compose.stack.animation.stackAnimator
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
 import kotlinx.coroutines.delay
 import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.koinInject
+
+private fun RootComponent.Configuration.navIndex(): Int =
+    BottomNavItem.items.indexOfFirst { it.config == this }
+        .let { if (it < 0) Int.MAX_VALUE else it }
 
 @OptIn(ExperimentalDecomposeApi::class)
 @Composable
@@ -58,6 +68,7 @@ fun App(
     val appTheme by settingsViewModel.uiSettings.collectAsState()
     val onSnackbarShown: (SnackbarState) -> Unit = { snackBars.add(it) }
     var isShowingSplash by remember { mutableStateOf(false) }
+    var isForwardNavigation by remember { mutableStateOf(true) }
     val isScreenKeepAwoken by settingsViewModel.isScreenKeepAwake.collectAsState()
 
 
@@ -132,7 +143,27 @@ fun App(
                             } else {
                                 Children(
                                     stack = childStack,
-                                    animation = stackAnimation(slide())
+                                    animation = predictiveBackAnimation(
+                                        backHandler = root.backHandler,
+                                        fallbackAnimation = stackAnimation(
+                                            stackAnimator(animationSpec = tween(300)) { factor, direction, content ->
+                                                BoxWithConstraints {
+                                                    val widthPx = with(LocalDensity.current) { maxWidth.toPx() }
+                                                    val adjustedFactor = when (direction) {
+                                                        Direction.ENTER_FRONT -> if (isForwardNavigation) factor else -factor
+                                                        Direction.EXIT_BACK -> if (isForwardNavigation) factor else -factor
+                                                        else -> factor
+                                                    }
+                                                    content(
+                                                        Modifier.offset {
+                                                            IntOffset(x = (adjustedFactor * widthPx).toInt(), y = 0)
+                                                        }
+                                                    )
+                                                }
+                                            }
+                                        ),
+                                        onBack = { root.navigateBack() }
+                                    )
                                 ) { child ->
                                     when (val component = child.instance) {
                                         is RootComponent.Child.Bookmarked ->
@@ -199,8 +230,9 @@ fun App(
                             AppBottomNavigation(
                                 currentChild = currentChild,
                                 appTheme = theme,
-                                onNavigateTo = {
-                                    root.navigateTo(it)
+                                onNavigateTo = { config ->
+                                    isForwardNavigation = config.navIndex() >= childStack.active.configuration.navIndex()
+                                    root.navigateTo(config)
                                 }
                             )
                         }
