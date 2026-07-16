@@ -18,6 +18,7 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.offset
@@ -30,14 +31,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import bethelsongbookkmp.composeapp.generated.resources.Res
 import bethelsongbookkmp.composeapp.generated.resources.ic_app_logo
 import bethelsongbookkmp.composeapp.generated.resources.no_song_found_by_number
-import androidx.compose.foundation.layout.BoxWithConstraints
-import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.unit.IntOffset
 import com.arkivanov.decompose.ExperimentalDecomposeApi
 import com.arkivanov.decompose.extensions.compose.stack.Children
 import com.arkivanov.decompose.extensions.compose.stack.animation.Direction
@@ -63,38 +63,39 @@ fun App(
 ) {
     val childStack by root.childStack.subscribeAsState()
     val currentChild = childStack.active.instance
+    val currentConfig = childStack.active.configuration
     var isLoadingSongs by remember { mutableStateOf(false) }
     val snackBars = remember { mutableStateListOf<SnackbarState>() }
     val appTheme by settingsViewModel.uiSettings.collectAsState()
     val onSnackbarShown: (SnackbarState) -> Unit = { snackBars.add(it) }
     var isShowingSplash by remember { mutableStateOf(false) }
-    var isForwardNavigation by remember { mutableStateOf(true) }
     val isScreenKeepAwoken by settingsViewModel.isScreenKeepAwake.collectAsState()
 
+    // Derive slide direction from the actual stack change — no manual flag needed.
+    // Details has navIndex = Int.MAX_VALUE so navigating to it is always forward.
+    val prevConfigRef = remember { arrayOf(currentConfig) }
+    val isForwardNavigation = remember { arrayOf(true) }
+    if (currentConfig != prevConfigRef[0]) {
+        isForwardNavigation[0] = currentConfig.navIndex() >= prevConfigRef[0].navIndex()
+        prevConfigRef[0] = currentConfig
+    }
 
-    // Animate alpha (fade in)
     val imageSize by animateDpAsState(
         targetValue = if (isShowingSplash) 250.dp else 120.dp,
-        animationSpec = tween(
-            durationMillis = 700,
-            easing = FastOutSlowInEasing
-        )
+        animationSpec = tween(durationMillis = 700, easing = FastOutSlowInEasing)
     )
 
-// Optional: animate alpha as well
     val alpha by animateFloatAsState(
         targetValue = if (isShowingSplash) 1f else 0f,
         animationSpec = tween(durationMillis = 700)
     )
-
-    // You can also animate alpha together (optional)
 
     LaunchedEffect(Unit) {
         delay(700)
         isShowingSplash = false
     }
 
-    LaunchedEffect(isScreenKeepAwoken){
+    LaunchedEffect(isScreenKeepAwoken) {
         println("effect worked $isScreenKeepAwoken")
         keepScreenOn(isScreenKeepAwoken)
     }
@@ -104,7 +105,6 @@ fun App(
         LaunchedEffect(theme) {
             onSystemBarColorChange(theme.darkIcons)
         }
-
 
         Scaffold(
             modifier = Modifier.fillMaxSize(),
@@ -127,7 +127,8 @@ fun App(
             else
                 Box(modifier = Modifier.fillMaxSize()) {
                     Column(
-                        modifier = Modifier.fillMaxSize()
+                        modifier = Modifier
+                            .fillMaxSize()
                             .padding(bottom = it.calculateBottomPadding())
                     ) {
                         Box(modifier = Modifier.weight(1f)) {
@@ -150,8 +151,12 @@ fun App(
                                                 BoxWithConstraints {
                                                     val widthPx = with(LocalDensity.current) { maxWidth.toPx() }
                                                     val adjustedFactor = when (direction) {
-                                                        Direction.ENTER_FRONT -> if (isForwardNavigation) factor else -factor
-                                                        Direction.EXIT_BACK -> if (isForwardNavigation) factor else -factor
+                                                        // ENTER_FRONT and EXIT_BACK use the same sign:
+                                                        // forward → factor as-is, backward → negated
+                                                        Direction.ENTER_FRONT,
+                                                        Direction.EXIT_BACK ->
+                                                            if (isForwardNavigation[0]) factor else -factor
+                                                        // Pop (back gesture / back button) — always standard
                                                         else -> factor
                                                     }
                                                     content(
@@ -174,9 +179,7 @@ fun App(
                                                 onSnackbarShown = onSnackbarShown,
                                                 navigateToDetails = {
                                                     root.navigateTo(
-                                                        RootComponent.Configuration.Details(
-                                                            it.toString()
-                                                        )
+                                                        RootComponent.Configuration.Details(it.toString())
                                                     )
                                                 }
                                             )
@@ -186,9 +189,7 @@ fun App(
                                             currentIndex = component.component.songIndex.collectAsState().value,
                                             settingsViewModel = settingsViewModel,
                                             onSnackbarShown = onSnackbarShown,
-                                            onBackClick = {
-                                                root.navigateBack()
-                                            }
+                                            onBackClick = { root.navigateBack() }
                                         )
 
                                         is RootComponent.Child.List -> ListScreen(
@@ -196,9 +197,7 @@ fun App(
                                             navigateToDetails = {
                                                 if (it >= 1 && it <= 1000)
                                                     root.navigateTo(
-                                                        RootComponent.Configuration.Details(
-                                                            it.toString()
-                                                        )
+                                                        RootComponent.Configuration.Details(it.toString())
                                                     )
                                                 else
                                                     onSnackbarShown(
@@ -216,24 +215,18 @@ fun App(
                                                     RootComponent.Configuration.Details(it.toString())
                                                 )
                                             },
-                                            onBackClick = {
-                                                root.navigateBack()
-                                            }
+                                            onBackClick = { root.navigateBack() }
                                         )
                                     }
                                 }
                             }
                         }
 
-                        // Show BottomNavigation only if not Details
                         if (currentChild !is RootComponent.Child.Details) {
                             AppBottomNavigation(
                                 currentChild = currentChild,
                                 appTheme = theme,
-                                onNavigateTo = { config ->
-                                    isForwardNavigation = config.navIndex() >= childStack.active.configuration.navIndex()
-                                    root.navigateTo(config)
-                                }
+                                onNavigateTo = { root.navigateTo(it) }
                             )
                         }
                     }
