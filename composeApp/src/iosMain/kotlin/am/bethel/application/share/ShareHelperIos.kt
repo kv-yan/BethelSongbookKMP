@@ -18,6 +18,12 @@ class ShareHelperIos : ShareHelper {
 
                 val keyWindow = UIApplication.sharedApplication.windows.first() as? UIWindow
                 val rootVC = keyWindow?.rootViewController
+
+                activityVC.popoverPresentationController?.apply {
+                    sourceView = rootVC?.view
+                    permittedArrowDirections = 0u
+                }
+
                 rootVC?.presentViewController(activityVC, animated = true, completion = null)
             } catch (e: Exception) {
                 println("iOS share error: ${e.message}")
