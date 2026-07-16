@@ -17,6 +17,7 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
@@ -31,7 +32,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
@@ -61,6 +64,7 @@ fun App(
     onSystemBarColorChange: (isDarkIcons: Boolean) -> Unit = {},
     keepScreenOn: (Boolean) -> Unit = {}
 ) {
+    val focusManager = LocalFocusManager.current
     val childStack by root.childStack.subscribeAsState()
     val currentChild = childStack.active.instance
     val currentConfig = childStack.active.configuration
@@ -125,7 +129,13 @@ fun App(
                     )
                 }
             else
-                Box(modifier = Modifier.fillMaxSize()) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .pointerInput(Unit) {
+                            detectTapGestures(onTap = { focusManager.clearFocus() })
+                        }
+                ) {
                     Column(
                         modifier = Modifier
                             .fillMaxSize()
