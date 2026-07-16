@@ -104,8 +104,8 @@ android {
         applicationId = "am.bethel.songbook"
         minSdk = libs.versions.android.minSdk.get().toInt()
         targetSdk = libs.versions.android.targetSdk.get().toInt()
-        versionCode = 10
-        versionName = "10.0"
+        versionCode = 12
+        versionName = "12.0"
     }
     packaging {
         resources {
