@@ -8,7 +8,7 @@ https://github.com/user-attachments/assets/c4a6aeb2-a476-4c86-b2d1-c714b4cc53fc
 
 The app is available on **Google Play** and the **App Store**:
 
-<a target="_blank" href="https://play.google.com/store/apps/details?id=am.bethel.songbook"><img width="135" src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" alt="Get it on Google Play" height="50"/></a>
+<a target="_blank" href="https://play.google.com/store/apps/details?id=am.bethel.songbook"><img style="width: 135px;" src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" alt="Get it on Google Play" height="50"/></a>
 <a target="_blank" href="https://apps.apple.com/kz/app/bethel-ergaran/id6788123312"><img src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg" alt="Download on the App Store" height="50"/></a>
 
 
